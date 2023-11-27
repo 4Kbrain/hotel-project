@@ -27,7 +27,7 @@ This project focuses on creating a database for a hotel. It encompasses various 
 1. Clone the repository to your local machine.
 
     ```bash
-    git clone https://github.com/your-username/hotel-database-project.git
+    git clone https://github.com/4Kbrain/hotel-database-project.git
     ```
 
 2. Open the project in your preferred code editor.
@@ -51,7 +51,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ### Contact
 
-For any inquiries or feedback, please contact Aditya Dwi Nugroho at [aditya@example.com](mailto:aditya@example.com).
+For any inquiries or feedback, please contact Aditya Dwi Nugroho at [aditya@example.com](mailto:chloeaubert6969@gmail.com).
 
 Feel free to contribute and make the project even more amazing! 🚀
 
