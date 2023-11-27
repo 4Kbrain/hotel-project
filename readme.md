@@ -51,7 +51,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ### Contact
 
-For any inquiries or feedback, please contact Aditya Dwi Nugroho at [aditya@example.com](mailto:chloeaubert6969@gmail.com).
+For any inquiries or feedback, please contact Aditya Dwi Nugroho at [chloeaubert6969#gmail.com](mailto:chloeaubert6969@gmail.com).
 
 Feel free to contribute and make the project even more amazing! 🚀
 
