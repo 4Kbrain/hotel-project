@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>admin</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+
+      :root {
+        --primary: #0077b6;
+        --secondary: red;
+        --black: #333;
+        --white: #fff;
+        --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        text-decoration: none;
+        text-transform: capitalize;
+        transition: 0.2s linear;
+      }
+
+      html {
+        font-size: 62.5%;
+        overflow-x: hidden;
+        scroll-padding-top: 9rem;
+        scroll-behavior: smooth;
+      }
+
+      html::-webkit-scrollbar {
+        width: 0.8rem;
+      }
+
+      html::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      html::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 0.5rem;
+      }
+
+      section {
+        padding: 5rem 7%;
+      }
+
+      .heading {
+        font-size: 4rem;
+        color: var(--primary);
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bolder;
+        margin-bottom: 3rem;
+      }
+
+      .btn {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 1rem 3rem;
+        background: var(--primary);
+        border-radius: 0.5rem;
+        color: var(--white);
+        font-size: 1.7rem;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: var(--secondary);
+      }
+
+      /* header */
+
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--black);
+        box-shadow: var(--box-shadow);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem 9%;
+      }
+
+      .header .logo {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--white);
+        font-style: italic;
+      }
+
+      .header .logo i {
+        color: var(--primary);
+        padding-right: 0.5rem;
+      }
+
+      .header .navbar a {
+        font-size: 1.7rem;
+        color: var(--white);
+        margin: 0 1rem;
+      }
+
+      .header .navbar a:hover {
+        color: var(--primary);
+      }
+
+      .header .navbar .btn {
+        margin-top: 0;
+        color: var(--white);
+      }
+
+      .header .navbar .btn:hover {
+        color: var(--white);
+      }
+
+      #menu-btn {
+        display: none;
+        font-size: 2.5rem;
+        margin-left: 1.7rem;
+        cursor: pointer;
+        color: var(--black);
+      }
+
+      #menu-btn:hover {
+        color: var(--primary);
+      }
+
+      /* end */
+
+      /* home start */
+
+      .home {
+        margin-top: 70px;
+        width: 100%;
+        background: url(../img/saiya-jin-gogeta.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header start -->
+    <header class="header">
+      <a href="#" class="logo">
+        Grand<span style="color: coral">Emporium</span>
+      </a>
+      <nav class="navbar">
+        <a href="#" class="active">Beranda</a>
+        <a href="karyawan.php">Karyawan</a>
+        <a href="kamar.php">Kamar</a>
+        <a href="fasilitas.php">Fasilitas</a>
+        <a href="logout.php" class="btn">Logout</a>
+      </nav>
+      <div id="menu-btn" class="fas fa-bars"></div>
+    </header>
+
+    <!-- end -->
+
+    <section class="home" id="home"></section>
+  </body>
+</html>
