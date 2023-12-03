@@ -140,7 +140,7 @@ if(!isset($_SESSION["user"]))
 											if($id % 2 ==1 )
 											{
 												echo"<tr class='gradeC'>
-													<td>".$row['title']." ".$row['fname']." ".$row['lname']."</td>
+													<td>".$row['fname']." ".$row['lname']."</td>
 													<td>".$row['troom']."</td>
 													<td>".$row['tbed']."</td>
 													<td>".$row['cin']."</td>
@@ -158,7 +158,7 @@ if(!isset($_SESSION["user"]))
 											else
 											{
 												echo"<tr class='gradeU'>
-													<td>".$row['title']." ".$row['fname']." ".$row['lname']."</td>
+													<td>".$row['fname']." ".$row['lname']."</td>
 													<td>".$row['troom']."</td>
 													<td>".$row['tbed']."</td>
 													<td>".$row['cin']."</td>

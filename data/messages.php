@@ -134,12 +134,6 @@ if(!isset($_SESSION["user"]))
                                             <h4 class="modal-title" id="myModalLabel">Compose News Letter</h4>
                                         </div>
 										<form method="post">
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                            <label>Title</label>
-                                            <input name="title" class="form-control" placeholder="Enter Title">
-											</div>
-										</div>
 										<div class="modal-body">
                                             <div class="form-group">
                                             <label>Subject</label>
@@ -166,7 +160,7 @@ if(!isset($_SESSION["user"]))
 							<?php
 							if(isset($_POST['log']))
 							{	
-								$log ="INSERT INTO `newsletterlog`(`title`, `subject`, `news`) VALUES ('$_POST[title]','$_POST[subject]','$_POST[news]')";
+								$log ="INSERT INTO `newsletterlog`(`subject`, `news`) VALUES ('$_POST[subject]','$_POST[news]')";
 								if(mysqli_query($con,$log))
 								{
 									echo '<script>alert("New Room Added") </script>' ;

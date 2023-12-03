@@ -22,7 +22,6 @@ if(!isset($_SESSION["user"]))
 				$re = mysqli_query($con,$sql);
 				while($row=mysqli_fetch_array($re))
 				{
-					$title = $row['Title'];
 					$fname = $row['FName'];
 					$lname = $row['LName'];
 					$email = $row['Email'];
@@ -171,7 +170,7 @@ if(!isset($_SESSION["user"]))
                                         </tr>
                                         <tr>
                                             <th>Name</th>
-                                            <th><?php echo $title.$fname.$lname; ?> </th>
+                                            <th><?php echo $fname.$lname; ?> </th>
                                             
                                         </tr>
 										<tr>
@@ -558,7 +557,7 @@ if(!isset($_SESSION["user"]))
 														$fintot = $ttot + $mepr + $btot ;
 															
 															//echo "<script type='text/javascript'> alert('$count_date')</script>";
-														$psql = "INSERT INTO `payment`(`id`, `title`, `fname`, `lname`, `troom`, `tbed`, `nroom`, `cin`, `cout`, `ttot`,`meal`, `mepr`, `btot`,`fintot`,`noofdays`) VALUES ('$id','$title','$fname','$lname','$troom','$bed','$nroom','$cin','$cout','$ttot','$meal','$mepr','$btot','$fintot','$days')";
+														$psql = "INSERT INTO `payment`(`id`, `fname`, `lname`, `troom`, `tbed`, `nroom`, `cin`, `cout`, `ttot`,`meal`, `mepr`, `btot`,`fintot`,`noofdays`) VALUES ('$id','$fname','$lname','$troom','$bed','$nroom','$cin','$cout','$ttot','$meal','$mepr','$btot','$fintot','$days')";
 														
 														if(mysqli_query($con,$psql))
 														{	$notfree="NotFree";

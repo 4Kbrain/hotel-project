@@ -175,7 +175,6 @@ tr:hover .cut { opacity: 1; }
 	while($row=mysqli_fetch_array($re))
 	{
 		$id = $row['id'];
-		$title = $row['title'];
 		$fname = $row['fname'];
 		$lname = $row['lname'];
 		$troom = $row['troom'];

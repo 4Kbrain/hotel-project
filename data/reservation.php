@@ -52,19 +52,6 @@ include('db.php')
                         </div>
                         <div class="panel-body">
 						<form name="form" method="post">
-                            <div class="form-group">
-                                            <label>Title*</label>
-                                            <select name="title" class="form-control" required >
-												<option value selected ></option>
-                                                <option value="Dr.">Dr.</option>
-                                                <option value="Miss.">Miss.</option>
-                                                <option value="Mr.">Mr.</option>
-                                                <option value="Mrs.">Mrs.</option>
-												<option value="Prof.">Prof.</option>
-												<option value="Rev .">Rev .</option>
-												<option value="Rev . Fr">Rev . Fr .</option>
-                                            </select>
-                              </div>
 							  <div class="form-group">
                                             <label>First Name</label>
                                             <input name="fname" class="form-control" required>
@@ -153,12 +140,12 @@ include('db.php')
                                             <select name="nroom" class="form-control" required>
 												<option value selected ></option>
                                                 <option value="1">1</option>
-                                              <!--  <option value="2">2</option>
+                                                <option value="2">2</option>
 												<option value="3">3</option>
 												<option value="4">4</option>
 												<option value="5">5</option>
 												<option value="6">6</option>
-												<option value="7">7</option> -->
+												<option value="7">7</option> 
                                             </select>
                               </div>
 							 
@@ -224,7 +211,7 @@ include('db.php')
 									else
 									{
 										$new ="Not Conform";
-										$newUser="INSERT INTO `roombook`(`Title`, `FName`, `LName`, `Email`, `National`, `Country`, `Phone`, `TRoom`, `Bed`, `NRoom`, `Meal`, `cin`, `cout`,`stat`,`nodays`) VALUES ('$_POST[title]','$_POST[fname]','$_POST[lname]','$_POST[email]','$_POST[nation]','$_POST[country]','$_POST[phone]','$_POST[troom]','$_POST[bed]','$_POST[nroom]','$_POST[meal]','$_POST[cin]','$_POST[cout]','$new',datediff('$_POST[cout]','$_POST[cin]'))";
+										$newUser="INSERT INTO `roombook`(`FName`, `LName`, `Email`, `National`, `Country`, `Phone`, `TRoom`, `Bed`, `NRoom`, `Meal`, `cin`, `cout`,`stat`,`nodays`) VALUES ('$_POST[fname]','$_POST[lname]','$_POST[email]','$_POST[nation]','$_POST[country]','$_POST[phone]','$_POST[troom]','$_POST[bed]','$_POST[nroom]','$_POST[meal]','$_POST[cin]','$_POST[cout]','$new',datediff('$_POST[cout]','$_POST[cin]'))";
 										if (mysqli_query($con,$newUser))
 										{
 											echo "<script type='text/javascript'> alert('Your Booking application has been sent')</script>";

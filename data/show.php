@@ -172,7 +172,6 @@ tr:hover .cut { opacity: 1; }
 	while($row=mysqli_fetch_array($re))
 	{
 		$id = $row['id'];
-		$title =  $row['Title'];
 		$Fname = $row['FName'];
 		$lname = $row['LName'];
 		$email = $row['Email'];
@@ -205,7 +204,7 @@ tr:hover .cut { opacity: 1; }
 			<address >
 				
 				<p><br></p>
-				<p>Coustomer Name  : -  <?php echo $title.$Fname." ".$lname;?><br></p>
+				<p>Coustomer Name  : -  <?php echo $Fname." ".$lname;?><br></p>
 			</address>
 			<table class="meta">
 				<tr>

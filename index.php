@@ -23,7 +23,7 @@
         <a href="#gallery">Gallery</a>
         <a href="#abot">Contact</a>
         <a href="data/login.php">admin</a>
-        <a href="http://localhost/Hotels/data/reservation.php" class="btn" target="_blank">Book Now</a>
+        <a href="http://localhost/Hotel-project1/data/reservation.php" class="btn" target="_blank">Book Now</a>
       </nav>
       <div id="menu-btn" class="fas fa-bars"></div>
     </header>

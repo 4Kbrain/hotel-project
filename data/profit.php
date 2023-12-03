@@ -169,7 +169,7 @@ if(!isset($_SESSION["user"]))
 											{
 												echo"<tr class='gradeC'>
 													<td>".$row['id']." </td>
-													<td>".$row['title']." ".$row['fname']." ".$row['lname']."</td>
+													<td>".$row['fname']." ".$row['lname']."</td>
 													<td>".$row['cin']."</td>
 													<td>".$row['cout']."</td>
 													
@@ -185,7 +185,7 @@ if(!isset($_SESSION["user"]))
 											{
 												echo"<tr class='gradeU'>
 													<td>".$row['id']." </td>
-													<td>".$row['title']." ".$row['fname']." ".$row['lname']."</td>
+													<td>".$row['fname']." ".$row['lname']."</td>
 													
 													<td>".$row['cin']."</td>
 													<td>".$row['cout']."</td>
