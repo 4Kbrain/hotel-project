@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2023 at 05:01 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Waktu pembuatan: 03 Des 2023 pada 23.55
+-- Versi server: 10.4.28-MariaDB
+-- Versi PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `login`
+-- Struktur dari tabel `login`
 --
 
 CREATE TABLE `login` (
@@ -34,7 +34,7 @@ CREATE TABLE `login` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Dumping data for table `login`
+-- Dumping data untuk tabel `login`
 --
 
 INSERT INTO `login` (`id`, `usname`, `pass`) VALUES
@@ -44,12 +44,11 @@ INSERT INTO `login` (`id`, `usname`, `pass`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `newsletterlog`
+-- Struktur dari tabel `newsletterlog`
 --
 
 CREATE TABLE `newsletterlog` (
   `id` int(10) UNSIGNED NOT NULL,
-  `title` varchar(52) DEFAULT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `news` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -57,7 +56,7 @@ CREATE TABLE `newsletterlog` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orang`
+-- Struktur dari tabel `orang`
 --
 
 CREATE TABLE `orang` (
@@ -69,7 +68,7 @@ CREATE TABLE `orang` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `orang`
+-- Dumping data untuk tabel `orang`
 --
 
 INSERT INTO `orang` (`nama_depan`, `nama_belakang`, `email`, `password`, `prim`) VALUES
@@ -83,12 +82,11 @@ INSERT INTO `orang` (`nama_depan`, `nama_belakang`, `email`, `password`, `prim`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `payment`
+-- Struktur dari tabel `payment`
 --
 
 CREATE TABLE `payment` (
   `id` int(11) DEFAULT NULL,
-  `title` varchar(5) DEFAULT NULL,
   `fname` varchar(30) DEFAULT NULL,
   `lname` varchar(30) DEFAULT NULL,
   `troom` varchar(30) DEFAULT NULL,
@@ -107,7 +105,7 @@ CREATE TABLE `payment` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pemesanan`
+-- Struktur dari tabel `pemesanan`
 --
 
 CREATE TABLE `pemesanan` (
@@ -121,7 +119,7 @@ CREATE TABLE `pemesanan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room`
+-- Struktur dari tabel `room`
 --
 
 CREATE TABLE `room` (
@@ -133,7 +131,7 @@ CREATE TABLE `room` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Dumping data for table `room`
+-- Dumping data untuk tabel `room`
 --
 
 INSERT INTO `room` (`id`, `type`, `bedding`, `place`, `cusid`) VALUES
@@ -144,12 +142,11 @@ INSERT INTO `room` (`id`, `type`, `bedding`, `place`, `cusid`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `roombook`
+-- Struktur dari tabel `roombook`
 --
 
 CREATE TABLE `roombook` (
   `id` int(10) UNSIGNED NOT NULL,
-  `Title` varchar(5) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `FName` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `LName` text CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
   `Email` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
@@ -167,43 +164,44 @@ CREATE TABLE `roombook` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `roombook`
+-- Dumping data untuk tabel `roombook`
 --
 
-INSERT INTO `roombook` (`id`, `Title`, `FName`, `LName`, `Email`, `National`, `Country`, `Phone`, `TRoom`, `Bed`, `NRoom`, `Meal`, `cin`, `cout`, `stat`, `nodays`) VALUES
-(1, 'Miss.', 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
-(2, 'Dr.', 'adit', 'dn', 'aditya.dwi3239@smk.belajar.id', 'Sri Lankan', 'Algeria', '0892131', 'Superior Room', 'Single', '1', 'Breakfast', '2023-11-15', '2023-11-27', 'Not Conform', 12),
-(3, 'Miss.', 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
-(4, 'Miss.', 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
-(5, '', 'super', 'dasd', '213@gmnai.com', '', '', '123123', 'Superior Room', 'Double', '', '', '2023-11-14', '2023-11-14', 'Not Conform', 0),
-(6, 'Miss.', 'a', 'sad', 'ridwannurislam@gmail.com', 'Sri Lankan', 'Bahrain', '123123', 'Deluxe Room', 'Triple', '1', 'Room only', '2023-11-23', '2023-11-24', 'Not Conform', 1),
-(7, 'Dr.', 'a', 'bcd', 'asda@gmail.com', 'Sri Lankan', 'Azerbaijan', '23123', 'Single Room', 'Single', '1', 'Room only', '2023-11-22', '2023-11-27', 'Not Conform', 5),
-(8, 'Rev .', 'a', 'a', 'yy@gmail.com', 'Indonesia', 'Bahrain', 'a', 'Deluxe Room', 'Single', '1', 'Room only', '2023-11-30', '2023-12-08', 'Not Conform', 8);
+INSERT INTO `roombook` (`id`, `FName`, `LName`, `Email`, `National`, `Country`, `Phone`, `TRoom`, `Bed`, `NRoom`, `Meal`, `cin`, `cout`, `stat`, `nodays`) VALUES
+(1, 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
+(2, 'adit', 'dn', 'aditya.dwi3239@smk.belajar.id', 'Sri Lankan', 'Algeria', '0892131', 'Superior Room', 'Single', '1', 'Breakfast', '2023-11-15', '2023-11-27', 'Not Conform', 12),
+(3, 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
+(4, 'a', 'a', 'aditgaming105@gmail.com', 'Sri Lankan', 'Angola', '2131231', 'Superior Room', 'Single', '1', 'Room only', '2023-11-15', '2023-11-28', 'Not Conform', 13),
+(5, 'super', 'dasd', '213@gmnai.com', '', '', '123123', 'Superior Room', 'Double', '', '', '2023-11-14', '2023-11-14', 'Not Conform', 0),
+(6, 'a', 'sad', 'ridwannurislam@gmail.com', 'Sri Lankan', 'Bahrain', '123123', 'Deluxe Room', 'Triple', '1', 'Room only', '2023-11-23', '2023-11-24', 'Not Conform', 1),
+(7, 'a', 'bcd', 'asda@gmail.com', 'Sri Lankan', 'Azerbaijan', '23123', 'Single Room', 'Single', '1', 'Room only', '2023-11-22', '2023-11-27', 'Not Conform', 5),
+(8, 'a', 'a', 'yy@gmail.com', 'Indonesia', 'Bahrain', 'a', 'Deluxe Room', 'Single', '1', 'Room only', '2023-11-30', '2023-12-08', 'Not Conform', 8),
+(9, 'sssssssss', 'aaaaaaaaaaa', 'ssssss@gmail.com', 'Indonesia', 'American Samoa', '382947823', 'Superior Room', 'Double', '5', 'Room only', '2023-12-05', '2023-12-20', 'Not Conform', 15);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `login`
+-- Indeks untuk tabel `login`
 --
 ALTER TABLE `login`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `newsletterlog`
+-- Indeks untuk tabel `newsletterlog`
 --
 ALTER TABLE `newsletterlog`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `orang`
+-- Indeks untuk tabel `orang`
 --
 ALTER TABLE `orang`
   ADD PRIMARY KEY (`prim`);
 
 --
--- Indexes for table `pemesanan`
+-- Indeks untuk tabel `pemesanan`
 --
 ALTER TABLE `pemesanan`
   ADD PRIMARY KEY (`id_pemesanan`),
@@ -211,57 +209,57 @@ ALTER TABLE `pemesanan`
   ADD KEY `id_kamar` (`id_kamar`);
 
 --
--- Indexes for table `room`
+-- Indeks untuk tabel `room`
 --
 ALTER TABLE `room`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `roombook`
+-- Indeks untuk tabel `roombook`
 --
 ALTER TABLE `roombook`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `login`
+-- AUTO_INCREMENT untuk tabel `login`
 --
 ALTER TABLE `login`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `newsletterlog`
+-- AUTO_INCREMENT untuk tabel `newsletterlog`
 --
 ALTER TABLE `newsletterlog`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `orang`
+-- AUTO_INCREMENT untuk tabel `orang`
 --
 ALTER TABLE `orang`
   MODIFY `prim` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `room`
+-- AUTO_INCREMENT untuk tabel `room`
 --
 ALTER TABLE `room`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `roombook`
+-- AUTO_INCREMENT untuk tabel `roombook`
 --
 ALTER TABLE `roombook`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `pemesanan`
+-- Ketidakleluasaan untuk tabel `pemesanan`
 --
 ALTER TABLE `pemesanan`
   ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_tamu`) REFERENCES `tamu` (`id_tamu`),
