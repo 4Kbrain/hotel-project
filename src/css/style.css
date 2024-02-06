@@ -222,6 +222,10 @@ section {
   text-align: center;
 }
 
+.input {
+  background-color: #fff;
+}
+
 .home .slide .content h3 {
   font-size: 4rem;
   text-transform: uppercase;

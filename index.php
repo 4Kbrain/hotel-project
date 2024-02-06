@@ -1,3 +1,8 @@
+<?php
+
+
+session_start();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,26 +13,35 @@
     <title>Grand Emporium</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../Hotels/src/css/style.css" />
+    <link rel="stylesheet" href="src/css/style.css" />
     <script src="/fontawesome-main/fontawesome-main/all.js"></script>
+    <link rel="stylesheet" href="src/css/style.css">
   </head>
   <body>
 
     <!-- navbar -->
     <header class="header">
-      <a href="#" class="logo"> Grand<span>Emporium</span> </a>
-      <nav class="navbar">
+    <a href="#" class="logo"> Grand<span>Emporium</span> </a>
+    <nav class="navbar">
         <a href="#home" class="active">Beranda</a>
         <a href="#about">About</a>
         <a href="#room">Room</a>
         <a href="#gallery">Gallery</a>
         <a href="#abot">Contact</a>
-        <a href="data/login.php">admin</a>
-        <a href="http://localhost/Hotel-project1/data/reservation.php" class="btn" target="_blank">Book Now</a>
-      </nav>
-      <div id="menu-btn" class="fas fa-bars"></div>
-    </header>
 
+        <?php
+        session_start();
+        if (isset($_SESSION['user'])) {
+            // User is logged in, show Reservation link
+            echo '<a href="http://localhost/hotel-project/reservation/reservation_form.php" class="btn" target="_self">Reservation</a>';
+        } else {
+            // User is not logged in, show Login link
+            echo '<a href="http://localhost/hotel-project/session/index.php" class="btn">Login</a>';
+        }
+        ?>
+    </nav>
+    <div id="menu-btn" class="fas fa-bars"></div>
+</header>
     
       <!-- home -->
       <section class="home" id="home">
@@ -36,28 +50,28 @@
 
       <div class="swiper-wrapper">
 
-            <div class="swiper-slide slide" style="background: url(../Hotels/img/home-slide1.webp) no-repeat;">
+            <div class="swiper-slide slide" style="background: url(img/home-slide1.webp) no-repeat;">
             <div class="content">
                   <h3>Welcome To Grand Emporium Hotel</h3>
                   <a href="#" class="btn"> visit our offer</a>
             </div>
             </div>
 
-            <div class="swiper-slide slide" style="background: url(../Hotels/img/home-slide2.webp) no-repeat;">
+            <div class="swiper-slide slide" style="background: url(img/home-slide2.webp) no-repeat;">
                <div class="content">
                   <h3>Welcome To Grand Emporium Hotel</h3>
                   <a href="#" class="btn"> visit our offer</a>
                </div>
             </div>
 
-            <div class="swiper-slide slide" style="background: url(../Hotels/img/home-slide3.jpeg) no-repeat;">
+            <div class="swiper-slide slide" style="background: url(img/home-slide3.jpeg) no-repeat;">
                <div class="content">
                   <h3>Welcome To Grand Emporium Hotel</h3>
                   <a href="#" class="btn"> visit our offer</a>
                </div>
             </div>
 
-            <div class="swiper-slide slide" style="background: url(../Hotels/img/home-slide4.jpg) no-repeat;">
+            <div class="swiper-slide slide" style="background: url(img/home-slide4.jpg) no-repeat;">
                <div class="content">
                   <h3>Welcome To Grand Emporium Hotel</h3>
                   <a href="#" class="btn"> visit our offer</a>
@@ -115,7 +129,7 @@
             </select>
          </div>
 
-         <div class="box">
+         <div class="box" >
             <p>rooms <span>*</span></p>
             <select name="rooms" id="" class="input">
                <option value="1">1 rooms</option>
@@ -128,7 +142,7 @@
          </div>
 
          <!-- <input type="submit" value="check availability" class="btn"> -->
-         <a href="../Hotels/src/book/book-direct.html" class="btn"><br>Check availability</a>
+         <a href="reservation/reservation_form.php" class="btn"><br>Check availability</a>
 
       </form>
 
@@ -144,7 +158,7 @@
       <div class="row">
 
          <div class="image">
-            <img src="../Hotels/img/abouts.jpg" alt="">
+            <img src="img/abouts.jpg" alt="">
          </div>
 
          <div class="content">
@@ -172,7 +186,7 @@
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room5.jpg" alt="">
+                  <img src="img/ex-room5.jpg" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -185,14 +199,14 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="../Hotels/src/book/room-book/index.html" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room4.jpg" alt="">
+                  <img src="img/ex-room4.jpg" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -205,14 +219,14 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="../Hotels/src/book/room-book/book.html" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room3.jpg" alt="">
+                  <img src="img/ex-room3.jpg" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -225,14 +239,14 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="#" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room1.jpg.crdownload" alt="">
+                  <img src="img/ex-room1.jpg.crdownload" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -245,14 +259,14 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="#" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room2.jpg" alt="">
+                  <img src="img/ex-room2.jpg" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -265,14 +279,14 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="#" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
             <div class="swiper-slide slide">
                <div class="image">
                   <span class="price">$15.99/night</span>
-                  <img src="../Hotels/img/ex-room.jpg.crdownload" alt="">
+                  <img src="img/ex-room.jpg.crdownload" alt="">
                   <a href="#" class="fas fa-shopping-cart"></a>
                </div>
                <div class="content">
@@ -285,7 +299,7 @@
                      <i class="fas fa-star"></i>
                      <i class="fas fa-star-half-alt"></i>
                   </div>
-                  <a href="#" class="btn">book now</a>
+                  <a href="reservation/reservation_form.php" class="btn">book now</a>
                </div>
             </div>
 
@@ -306,32 +320,32 @@
       <div class="box-container">
 
          <div class="box">
-            <img src="../Hotels/img/swimmer.png" alt="Swim">
+            <img src="img/swimmer.png" alt="Swim">
             <h3>swimming pool</h3>
          </div>
 
          <div class="box">
-            <img src="../Hotels/img/dinner.png" alt="Dinner">
+            <img src="img/dinner.png" alt="Dinner">
             <h3>food & drink</h3>
          </div>
 
          <div class="box">
-            <img src="../Hotels/img/table.png" alt="Restaurant">
+            <img src="img/table.png" alt="Restaurant">
             <h3>restaurant</h3>
          </div>
 
          <div class="box">
-            <img src="../Hotels/img/exercise.png" alt="Fitness">
+            <img src="img/exercise.png" alt="Fitness">
             <h3>fitness</h3>
          </div>
 
          <div class="box">
-            <img src="../Hotels/img/massage.png" alt="Spa">
+            <img src="img/massage.png" alt="Spa">
             <h3>beauty spa</h3>
          </div>
 
          <div class="box">
-            <img src="../Hotels/img/beach-umbrella-and-hammock.png" alt="Resort">
+            <img src="img/beach-umbrella-and-hammock.png" alt="Resort">
             <h3>resort beach</h3>
          </div>
 
@@ -352,28 +366,28 @@
          <div class="swiper-wrapper">
 
             <div class="swiper-slide slide">
-               <img src="../Hotels/img/spageti.jpg" alt="">
+               <img src="img/spageti.jpg" alt="">
                <div class="icon">
                   <i class="fas fa-magnifying-glass-plus"></i>
                </div>
             </div>
 
             <div class="swiper-slide slide">
-               <img src="../Hotels/img/katsudon.jpeg" alt="spagetti">
+               <img src="img/katsudon.jpeg" alt="spagetti">
                <div class="icon">
                   <i class="fas fa-magnifying-glass-plus"></i>
                </div>
             </div>
 
             <div class="swiper-slide slide">
-               <img src="../Hotels/img/steak.jpg" alt="Steak">
+               <img src="img/steak.jpg" alt="Steak">
                <div class="icon">
                   <i class="fas fa-magnifying-glass-plus"></i>
                </div>
             </div>
 
             <div class="swiper-slide slide">
-               <img src="../Hotels/img/pizza.jpg" alt="">
+               <img src="img/pizza.jpg" alt="">
                <div class="icon">
                   <i class="fas fa-magnifying-glass-plus"></i>
                </div>
@@ -468,7 +482,7 @@
       
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script type="module" src="/Hotels/src/js/script.js"></script>
+    <script type="module" src="src/js/script.js"></script>
   </body>
 </html>
 
