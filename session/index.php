@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if ($row['is_admin'] && $enteredPassword === 'admin') {
                 $_SESSION['user'] = $mygmail;
-                header("location: ../user/beranda.php");
+                header("location: ../user/index.php");
                 exit();
             } elseif (!$row['is_admin'] && password_verify($enteredPassword, $row['password'])) {
                 

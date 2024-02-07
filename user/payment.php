@@ -75,7 +75,8 @@ if ($user_id !== null) {
     exit();
 }
 
-// Handle Action dari Cange
+
+// Handle Action dari Change
 if (isset($_GET['change_id'])) {
     $change_id = $_GET['change_id'];
     changePaymentStatus($conn, $change_id, 'Paid');
@@ -83,7 +84,19 @@ if (isset($_GET['change_id'])) {
     exit();
 }
 
+
+$payments = getUserPayments($conn, $user_id);
+
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$perPage = 10;
+$totalPayments = count($payments);
+$totalPages = ceil($totalPayments / $perPage);
+$start = ($page - 1) * $perPage;
+$end = $start + $perPage;
+$paymentsToShow = array_slice($payments, $start, $perPage);
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -93,37 +106,128 @@ if (isset($_GET['change_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <style>
-        body {
+
+        ::-webkit-scrollbar {
+            display:none;
+        }
+
+body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
         }
-
-        .top-navbar {
-            background-color: #f0f0f0;
-            padding: 10px;
-            text-align: center;
+              .top-navbar {
+            background-color: #4894FE;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
         }
 
-        .top-navbar a {
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile {
+            margin-right: 30px;
+            position: relative;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px 20px 10px 20px;
+            display: none;
+        }
+
+        .profile:hover .profile-menu {
+            display: block;
+        }
+
+        .profile-menu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .content {
+            margin-left: 180px;
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 180px;
+            background-color: #f0f0f0;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            height: calc(100vh - 40px);
+            position: fixed;
+            top: 40px;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
             text-decoration: none;
             color: #555;
             font-weight: bold;
             font-size: 18px;
-            margin: 0 20px; 
+            padding: 10px 20px;
+            transition: all 0.3s ease;
         }
 
-        .top-navbar a:hover {
+        .sidebar a.active {
+            background-color: #d3d3d3;
+            color: #0077b6;
+        }
+
+        .sidebar a:hover {
+            background-color: #d3d3d3;
             color: #0077b6;
         }
 
         .payment-container {
+
+            margin-left: 200px;
             padding: 20px;
             text-align: center;
         }
 
         .payment-table {
-            width: 100%;
+            width: 99%;
+            margin-left: 10px;
             border-collapse: collapse;
             margin-top: 20px;
         }
@@ -157,11 +261,23 @@ if (isset($_GET['change_id'])) {
 <body>
 
 <div class="top-navbar">
-    <a href="beranda.php">Beranda</a>
-    <a href="status.php">Status Roombooking</a>
-    <a href="payment.php">Payment</a>
-    <a href="../logout.php">Logout</a>
-</div>
+        <div class="logo">
+            <a href="#"><span style="color:#fff">Admin</span></a>
+        </div>
+        <div class="profile">
+            <span>Username</span>
+            <div class="profile-menu">
+                <a href="#">Profile</a><hr>
+                <a href="../logout.php">Logout</a>
+            </div>
+        </div>
+    </div>
+
+<div class="sidebar">
+    <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a><hr>
+    <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a><hr>
+    <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a>
+    </div>
 
 <div class="payment-container">
     <h2>Data Payment</h2>
@@ -190,6 +306,21 @@ if (isset($_GET['change_id'])) {
         <?php endforeach; ?>
         </tbody>
     </table>
+
+    <div class="pagination">
+                    <?php
+
+
+                $totalEntries = mysqli_num_rows($conn->query("SELECT id_payment FROM payment"));
+                $totalPages = ceil($totalPayments / $PerPage);
+
+                    for ($i = 1; $i <= $totalPages; $i++) {
+                        echo "<a href='?page=$i' class='pagination-link";
+                        echo ($i == $page) ? " active'" : "'";
+                        echo ">$i</a> ";
+                    }
+                    ?>
+                </div>
 </div>
 
 </body>

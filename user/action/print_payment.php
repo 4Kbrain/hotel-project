@@ -114,16 +114,19 @@ if (isset($_GET['id'])) {
 }
 
 .header img {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
+    width: 150px;
+    height: auto;
+    margin-right: 50px;
 }
 
 .hotel-info {
+    text-align: right;
     flex-grow: 1;
 }
 
-.invoice h2 {
+h2 {
+    font-size:30px;
+    text-align:center;
     color: #0077b6;
     border-bottom: 2px solid #0077b6;
     padding-bottom: 10px;
@@ -144,6 +147,7 @@ if (isset($_GET['id'])) {
 }
 
 .footer {
+    text-align:right;
     margin-top: 20px;
     font-size: 12px;
     color: #555;
@@ -180,8 +184,9 @@ if (isset($_GET['id'])) {
 <body>
 
 <div class="container">
+<h2>Invoice</h2>
     <div class="header">
-        <img src="hotel_logo.png" alt="Grand Emporium Logo">
+        <img src="../../img/logo.png" alt="Grand Emporium Logo">
         <div class="hotel-info">
             <h1>Grand Emporium Hotel</h1>
             <p>Address: 123 Elegant Street, Cityville</p>
@@ -191,7 +196,6 @@ if (isset($_GET['id'])) {
     </div>
 
     <div class="invoice">
-        <h2>Invoice</h2>
         <p>Issued to: <?php echo $payment_details['FName'] . " " . $payment_details['LName']; ?></p>
         <p>Invoice Number: <?php echo "INV" . uniqid(); ?></p>
         <p>Check-in Date: <?php echo $payment_details['cin']; ?></p>
@@ -201,7 +205,7 @@ if (isset($_GET['id'])) {
     <div class="items">
         <div class="item">
             <span>Room Type: <?php echo $payment_details['TRoom']; ?></span>
-            <span>Number of Days: <?php echo $payment_details['nodays']; ?></span>
+            <span>Number of Nights: <?php echo $payment_details['nodays']; ?></span>
             <span>Total Cost: <?php echo "$" . $payment_details['total_cost']; ?></span>
         </div>
         <!-- item -->

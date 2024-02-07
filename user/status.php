@@ -34,13 +34,11 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-
 if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
     echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);
     exit();
 }
 
-// Pengaturan pagination
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $entriesPerPage = 10;
 $start = ($page - 1) * $entriesPerPage;
@@ -56,31 +54,122 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <style>
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
         }
 
         .top-navbar {
-            background-color: #f0f0f0;
-            padding: 10px;
-            text-align: center;
+            background-color: #4894FE;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 999;
         }
 
-        .top-navbar a {
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile {
+            margin-right: 30px;
+            position: relative;
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px 20px 10px 20px;
+            display: none;
+        }
+
+        .profile:hover .profile-menu {
+            display: block;
+        }
+
+        .profile-menu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .content {
+            margin-left: 180px;
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 180px;
+            background-color: #f0f0f0;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            height: calc(100vh - 40px);
+            position: fixed;
+            top: 40px;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            display: block;
             text-decoration: none;
             color: #555;
             font-weight: bold;
             font-size: 18px;
-            margin: 0 20px; 
+            padding: 10px 20px;
+            transition: all 0.3s ease;
         }
 
-        .top-navbar a:hover {
-            color: #0077b6; 
+        .sidebar a.active {
+            background-color: #d3d3d3;
+            color: #0077b6;
+        }
+
+        .sidebar a:hover {
+            background-color: #d3d3d3;
+            color: #0077b6;
         }
 
         .reservation-container {
+            margin-right: -35px;
             padding: 20px;
             text-align: center;
         }
@@ -89,9 +178,11 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 20px;
         }
 
-        .reservation-table th, .reservation-table td {
+        .reservation-table th,
+        .reservation-table td {
             border: 1px solid #ddd;
             padding: 10px;
         }
@@ -101,10 +192,11 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
         }
 
         .action-column {
-            width: 100px;
+            width: 80px;
         }
 
         .action-link {
+            width: 80px;
             display: block;
             text-align: center;
             padding: 5px;
@@ -112,83 +204,127 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
             background-color: #0077b6;
             color: white;
             border-radius: 5px;
-            margin: 5px auto;
+            margin: 3px auto;
         }
+
+        #entry {
+            margin-top: 20px;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination-link {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 3px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-link.active {
+            background-color: #0077b6;
+            color: #fff;
+            border-color: #0077b6;
+        }
+
     </style>
 </head>
 
 <body>
 
-<div class="top-navbar">
-    <a href="beranda.php">Beranda</a>
-    <a href="status.php">Status Roombooking</a>
-    <a href="payment.php">Payment</a>
-    <a href="../logout.php">Logout</a>
-</div>
+    <div class="top-navbar">
+        <div class="logo">
+            <a href="#"><span style="color:#fff">Admin</span></a>
+        </div>
+        <div class="profile">
+            <span>Username</span>
+            <div class="profile-menu">
+                <a href="#">Profile</a><hr>
+                <a href="../logout.php">Logout</a>
+            </div>
+        </div>
+    </div>
 
-<div class="reservation-container">
-    <h2>Data Roombook</h2>
-    <table class="reservation-table">
-        <thead>
-        <tr>
-        <th>ID</th>
-            <th>FName</th>
-            <th>LName</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>TRoom</th>
-            <th>Bed</th>
-            <th>NRoom</th>
-            <th>cin</th>
-            <th>cout</th>
-            <th>Status</th>
-            <th>NoDays</th>
-            <th>Total Cost</th>
-            <th>ID User</th>
-            <th class="action-column">Action</th>
-            <th class="action-column">Confirm Reservation</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($reservations as $reservation): ?>
-            <tr>
-                <td><?php echo $reservation['id_reservation']; ?></td>
-                <td><?php echo $reservation['FName']; ?></td>
-                <td><?php echo $reservation['LName']; ?></td>
-                <td><?php echo $reservation['Email']; ?></td>
-                <td><?php echo $reservation['Phone']; ?></td>
-                <td><?php echo $reservation['TRoom']; ?></td>
-                <td><?php echo $reservation['Bed']; ?></td>
-                <td><?php echo $reservation['NRoom']; ?></td>
-                <td><?php echo $reservation['cin']; ?></td>
-                <td><?php echo $reservation['cout']; ?></td>
-                <td><?php echo $reservation['stat']; ?></td>
-                <td><?php echo $reservation['nodays']; ?></td>
-                <td><?php echo $reservation['total_cost']; ?></td>
-                <td><?php echo $reservation['id_user']; ?></td>
-                <td class="action-column">
-                    <a class="action-link" href="action/edit_status.php?id=<?php echo $reservation['id_reservation']; ?>">Edit</a>
-                    <a class="action-link" href="action/create_status.php">Create</a>
-                    <a class="action-link" href="action/delete_status.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
-                </td>
-                <td>
-                    <a class="action-link" href="action/confirm_status.php?id=<?php echo $reservation['id_reservation']; ?>">Confirm</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="sidebar">
+    <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a><hr>
+    <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a><hr>
+    <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a>
+    </div>
 
-    <!-- pagination harus ingat -->
-    <?php
-    $totalEntries = mysqli_num_rows($conn->query("SELECT id_reservation FROM roombook"));
-    $totalPages = ceil($totalEntries / $entriesPerPage);
+    <div class="content">
+        <div class="reservation-container">
+            <h2 style="margin-top:30px;">Data Roombook</h2>
+            <table class="reservation-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>FName</th>
+                        <th>LName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>TRoom</th>
+                        <th>Bed</th>
+                        <th>NRoom</th>
+                        <th>cin</th>
+                        <th>cout</th>
+                        <th>Status</th>
+                        <th>NoDays</th>
+                        <th>Total Cost</th>
+                        <!-- <th>ID User</th> -->
+                        <th class="action-column">Action</th>
+                        <th class="action-column">Confirm Reservation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($reservations as $reservation): ?>
+                        <tr>
+                            <td><?php echo $reservation['id_reservation']; ?></td>
+                            <td><?php echo $reservation['FName']; ?></td>
+                            <td><?php echo $reservation['LName']; ?></td>
+                            <td><?php echo $reservation['Email']; ?></td>
+                            <td><?php echo $reservation['Phone']; ?></td>
+                            <td><?php echo $reservation['TRoom']; ?></td>
+                            <td><?php echo $reservation['Bed']; ?></td>
+                            <td><?php echo $reservation['NRoom']; ?></td>
+                            <td><?php echo $reservation['cin']; ?></td>
+                            <td><?php echo $reservation['cout']; ?></td>
+                            <td><?php echo $reservation['stat']; ?></td>
+                            <td><?php echo $reservation['nodays']; ?></td>
+                            <td>$<?php echo $reservation['total_cost']; ?></td>
+                            <td class="action-column">
+                                <a class="action-link" href="action/edit_status.php?id=<?php echo $reservation['id_reservation']; ?>">Edit</a>
+                                <a class="action-link" href="action/delete_status.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
+                            </td>
+                            <td>
+                                <a class="action-link" href="action/confirm_status.php?id=<?php echo $reservation['id_reservation']; ?>">Confirm</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
 
-    for ($i = 1; $i <= $totalPages; $i++) {
-        echo "<a href='?page=$i'>$i</a> ";
-    }
-    ?>
-</div>
+            <div class="pagination">
+                <?php
+                $totalEntries = mysqli_num_rows($conn->query("SELECT id_reservation FROM roombook"));
+                $totalPages = ceil($totalEntries / $entriesPerPage);
+
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    echo "<a href='?page=$i' class='pagination-link";
+                    echo ($i == $page) ? " active'" : "'";
+                    echo ">$i</a> ";
+                }
+                ?>
+            </div>
+
+            <!-- <a class="action-link" href="action/create_status.php" id="entry">New Entry</a> -->
+        </div>
+    </div>
 
 </body>
 

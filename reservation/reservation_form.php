@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// check login
 if (!isset($_SESSION['user'])) {
     header("Location: ../session/index.php");
     exit();
@@ -172,32 +171,49 @@ if (!isset($_SESSION['user'])) {
                 const costBreakdownElement = document.getElementById('costBreakdown');
                 const numDaysElement = document.getElementById('numDays');
 
+                const reservationForm = document.querySelector('form');
+
+    reservationForm.addEventListener('submit', function(event) {
+        const cinDate = new Date(cinInput.value);
+        const coutDate = new Date(coutInput.value);
+
+        if (coutDate <= cinDate) {
+            event.preventDefault(); // Prevent form submission
+            alert("Check-out date must be after check-in date.");
+            return false; // Stop further processing
+        }
+    });
                 const calculateTotalCostAndDays = () => {
-                    const roomTypeCosts = {
-                        'Superior Room': 100,
-                        'Deluxe Room': 150,
-                        'Guest House': 200,
-                        'Single Room': 80,
-                    };
+    const roomTypeCosts = {
+        'Superior Room': 100,
+        'Deluxe Room': 150,
+        'Guest House': 200,
+        'Single Room': 80,
+    };
 
-                    const roomType = roomTypeSelect.value;
-                    const bedType = bedTypeSelect.value;
-                    const numRooms = numRoomsSelect.value;
-                    const cinDate = new Date(cinInput.value);
-                    const coutDate = new Date(coutInput.value);
+    const roomType = roomTypeSelect.value;
+    const bedType = bedTypeSelect.value;
+    const numRooms = numRoomsSelect.value;
+    const cinDate = new Date(cinInput.value);
+    const coutDate = new Date(coutInput.value);
 
-                    const roomCost = roomTypeCosts[roomType] || 0;
-                    const bedCost = bedType === 'None' ? 0 : 20; 
+    const roomCost = roomTypeCosts[roomType] || 0;
+    const bedCost = bedType === 'None' ? 0 : 20;
+    
+    let numDays = Math.ceil((coutDate - cinDate) / (1000 * 60 * 60 * 24));
 
-                    const totalCost = (roomCost + bedCost) * numRooms;
-                    const roomCostBreakdown = `Room Cost: $${roomCost * numRooms}`;
-                    const bedCostBreakdown = `Bed Cost: $${bedCost * numRooms}`;
-                    const numDays = Math.ceil((coutDate - cinDate) / (1000 * 60 * 60 * 24));
+    numDays = numDays < 0 ? 0 : numDays;
 
-                    totalCostElement.textContent = `Total Cost: $${totalCost}`;
-                    costBreakdownElement.textContent = `${roomCostBreakdown} | ${bedCostBreakdown}`;
-                    numDaysElement.textContent = `Number of Days: ${numDays}`;
-                };
+    const totalCost = (roomCost + bedCost) * numRooms * numDays;
+    const roomCostBreakdown = `Room Cost: $${roomCost * numRooms * numDays}`;
+    const bedCostBreakdown = `Bed Cost: $${bedCost * numRooms * numDays}`;
+
+    totalCostElement.textContent = `Total Cost: $${totalCost}`;
+    costBreakdownElement.textContent = `${roomCostBreakdown} | ${bedCostBreakdown}`;
+    numDaysElement.textContent = `Number of Days: ${numDays}`;
+};
+
+
 
                 calculateTotalCostAndDays();
 
