@@ -22,7 +22,7 @@ if (!isset($_SESSION['user'])) {
 $reservation_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ($reservation_id === null) {
-    echo json_encode(["success" => false, "message" => "Reservation ID not provided. QwQ"]);
+    echo json_encode(["success" => false, "message" => "Reservation ID not provided. OwO"]);
     exit();
 }
 
@@ -42,7 +42,7 @@ if ($reservation_result->num_rows > 0) {
 
         if ($conn->query($insert_payment_sql) === TRUE) {
             
-            echo '<script>alert("Reservation confirmed successfully. UwU");</script>';
+            echo '<script>alert("Reservation confirmed successfully!");</script>';
             
             echo '<script>window.history.go(-1);</script>';
             exit();

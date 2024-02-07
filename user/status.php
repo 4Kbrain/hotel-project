@@ -243,7 +243,7 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
             <a href="#"><span style="color:#fff">Admin</span></a>
         </div>
         <div class="profile">
-            <span>Username</span>
+            <span style="color:#fff;">Username</span>
             <div class="profile-menu">
                 <a href="#">Profile</a><hr>
                 <a href="../logout.php">Logout</a>
@@ -298,8 +298,8 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
                             <td><?php echo $reservation['nodays']; ?></td>
                             <td>$<?php echo $reservation['total_cost']; ?></td>
                             <td class="action-column">
-                                <a class="action-link" href="action/edit_status.php?id=<?php echo $reservation['id_reservation']; ?>">Edit</a>
-                                <a class="action-link" href="action/delete_status.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
+                                <a class="action-link" href="action/edit_status.php?id=<?php echo $reservation['id_reservation']; ?>">Edit</a>  
+                                <a class="action-link" href="action/process/delete_reservation.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
                             </td>
                             <td>
                                 <a class="action-link" href="action/confirm_status.php?id=<?php echo $reservation['id_reservation']; ?>">Confirm</a>

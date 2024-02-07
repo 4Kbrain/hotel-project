@@ -25,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if (mysqli_query($con, $sql)) {
                 $success_message = "Registration successful! You can now log in.";
+                header("location:../session/index.php");
             } else {
                 $error_message = "Error executing the query: " . mysqli_error($con);
             }
@@ -45,7 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #e7c6;
+
+    background: url(../img/the\ night.jpg);
+    background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
             margin: 0;

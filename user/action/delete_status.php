@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 
 function getReservationDetails($conn, $reservation_id)
 {
-    $sql = "SELECT * FROM roombook WHERE id = $reservation_id";
+    $sql = "SELECT * FROM roombook WHERE id_reservation = $reservation_id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -87,13 +87,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
 
 <div class="form-container">
     <h2>Delete Reservation</h2>
-    <form action="process_delete_reservation.php" method="post">
-        <input type="hidden" name="reservation_id" value="<?php echo $reservation_details['id']; ?>">
+    <form action="process/delete_reservation.php" method="post">
+        <input type="hidden" name="reservation_id" value="<?php echo $reservation_details['id_reservation']; ?>">
         <p>Are you sure you want to delete this reservation?</p>
-        <p>ID: <?php echo $reservation_details['id']; ?></p>
+        <p>ID: <?php echo $reservation_details['id_reservation']; ?></p>
         <p>Name: <?php echo $reservation_details['FName'] . ' ' . $reservation_details['LName']; ?></p>
         <!-- more -->
         <button type="submit" class="form-button">Delete Reservation</button>
+        <a class="action-link" href="action/delete_status.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
     </form>
 </div>
 

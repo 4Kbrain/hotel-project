@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
         }
 
         .form-button {
-            background-color: #4CAF50;
+            background-color: #4894FE;
             color: white;
             border: none;
             padding: 8px 16px;
@@ -87,14 +87,41 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
 
 <div class="form-container">
     <h2>Edit Reservation</h2>
-    <form action="process_edit_reservation.php" method="post">
+    <form action="process/edit_reservation.php" method="post">
         <input type="hidden" name="reservation_id" value="<?php echo $reservation_details['id_reservation']; ?>">
         <input class="form-input" type="text" name="FName" value="<?php echo $reservation_details['FName']; ?>" required>
         <input class="form-input" type="text" name="LName" value="<?php echo $reservation_details['LName']; ?>" required>
         <input class="form-input" type="email" name="Email" value="<?php echo $reservation_details['Email']; ?>" required>
+        <input type="text" name="phone" value="<?php echo $reservation_details['Phone']?>" required>
+         <select name="troom" value="<?php echo $reservation_details['TRoom']?>" required>
+                <option value="" disabled selected>Select Room Type</option>
+                <option value="Superior Room">Superior Room</option>
+                <option value="Deluxe Room">Deluxe Room</option>
+                <option value="Guest House">Guest House</option>
+                <option value="Single Room">Single Room</option>
+            </select>
+            <select name="bed" value="<?php echo $reservation_details['Bed']?>" required>
+                <option value="" disabled selected>Select Bedding Type</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Triple">Triple</option>
+                <option value="Quad">Quad</option>
+                <option value="None">None</option>
+            </select>
+            <select name="nroom" value="<?php echo $reservation_details['NRoom']?>" required>
+                <option value="" disabled selected>Select Number of Rooms</option>
+                <?php
+                for ($i = 1; $i <= 7; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                }
+                ?>
+            </select>
+
         <!-- more -->
         <button type="submit" class="form-button">Save Changes</button>
     </form>
+
+
 </div>
 
 </body>

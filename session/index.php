@@ -50,7 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
     body {
     font-family: 'Arial', sans-serif;
-    background: #e7c6;
+    background: url(../img/the\ night.jpg);
+    background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin: 0;

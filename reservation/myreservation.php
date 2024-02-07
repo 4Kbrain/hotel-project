@@ -20,14 +20,14 @@ if (!isset($_SESSION['user'])) {
 }
 
 $user_email = $_SESSION['user'];
-$user_sql = "SELECT id FROM users WHERE gmail = '$user_email'";
+$user_sql = "SELECT id_user FROM users WHERE gmail = '$user_email'";
 $user_result = $conn->query($user_sql);
 
 if ($user_result->num_rows > 0) {
     $user_row = $user_result->fetch_assoc();
-    $user_id = $user_row['id'];
+    $user_id = $user_row['id_user'];
 
-    $sql = "SELECT * FROM roombook WHERE id = $user_id";
+    $sql = "SELECT * FROM roombook WHERE id_user = $user_id";
     $result = $conn->query($sql);
     $reservations = [];
 
@@ -40,17 +40,17 @@ if ($user_result->num_rows > 0) {
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cancel_reservation'])) {
         $reservation_id_to_cancel = $_POST['cancel_reservation'];
 
-        $cancel_sql = "DELETE FROM roombook WHERE id = $reservation_id_to_cancel AND id = $user_id";
+        $cancel_sql = "DELETE FROM roombook WHERE id_reservation = $reservation_id_to_cancel AND id_user = $user_id";
         if ($conn->query($cancel_sql) === TRUE) {
-            echo json_encode(["success" => true, "message" => "Reservation canceled successfully. QwQ"]);
+            echo json_encode(["success" => true, "message" => "Reservation canceled successfully. "]);
             exit();
         } else {
-            echo json_encode(["success" => false, "message" => "Error canceling reservation. TwT"]);
+            echo json_encode(["success" => false, "message" => "Error canceling reservation. TwT..Try Again later"]);
             exit();
         }
     }
 } else {
-    echo "User ID not found. QwQ";
+    echo "User ID not found. ";
     exit();
 }
 ?>
@@ -61,19 +61,19 @@ if ($user_result->num_rows > 0) {
 <div class="bottom-navbar">
     <a href="reservation.php" class="navbar-item">Adorable Reservation</a>
     <span class="navbar-divider">|</span>
-    <a href="my_reservation.php" class="navbar-item active">My Kawaii Reservation</a>
+    <a href="my_reservation.php" class="navbar-item active">My Reservation</a>
 </div>
 
 <div class="reservation-container">
     <?php foreach ($reservations as $reservation): ?>
         <div class="reservation-item">
-            <p>Reservation ID: <?php echo $reservation['id']; ?></p>
+            <p>Reservation ID: <?php echo $reservation['id_user']; ?></p>
             <!-- reserv detail -->
 
             <form class="cancel-form" method="post">
-                <input type="hidden" name="cancel_reservation" value="<?php echo $reservation['id']; ?>">
-                <button type="button" class="cancel-button" onclick="cancelReservation(<?php echo $reservation['id']; ?>)">
-                    Cancel Reservation QwQ
+                <input type="hidden" name="cancel_reservation" value="<?php echo $reservation['id_user']; ?>">
+                <button type="button" class="cancel-button" onclick="cancelReservation(<?php echo $reservation['id_user']; ?>)">
+                    Cancel Reservation 
                 </button>
             </form>
         </div>
@@ -82,7 +82,7 @@ if ($user_result->num_rows > 0) {
 
 <script>
     function cancelReservation(reservationId) {
-        if (confirm('Are you sure you want to cancel this reservation? QwQ')) {
+        if (confirm('Are you sure you want to cancel this reservation? ')) {
             
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "my_reservation.php", true);

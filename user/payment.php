@@ -265,7 +265,7 @@ body {
             <a href="#"><span style="color:#fff">Admin</span></a>
         </div>
         <div class="profile">
-            <span>Username</span>
+            <span style="color:#fff;">Username</span>
             <div class="profile-menu">
                 <a href="#">Profile</a><hr>
                 <a href="../logout.php">Logout</a>
@@ -280,6 +280,9 @@ body {
     </div>
 
 <div class="payment-container">
+    <div class="blank">
+        <span>-</span>
+    </div>
     <h2>Data Payment</h2>
     <table class="payment-table">
         <thead>
