@@ -3,16 +3,20 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+if (isset($_SESSION['user'])) {
+    // User is already logged in, redirect to the dashboard or home page
+    header("location: ../index.php");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('../db.php');
 
     $mygmail = mysqli_real_escape_string($con, $_POST['gmail']); 
     $mypassword = mysqli_real_escape_string($con, $_POST['password']);
 
-    
     $hashed_password = password_hash($mypassword, PASSWORD_DEFAULT);
 
-    
     $check_query = "SELECT * FROM users WHERE gmail = '$mygmail'"; 
     $check_result = mysqli_query($con, $check_query);
 
@@ -20,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($check_result) > 0) {
             $error_message = "This email is already registered. Please choose a different one.";
         } else {
-            
             $sql = "INSERT INTO users (gmail, password, is_admin) VALUES ('$mygmail', '$hashed_password', 0)";
             
             if (mysqli_query($con, $sql)) {

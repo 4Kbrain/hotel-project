@@ -233,6 +233,48 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
             border-color: #0077b6;
         }
 
+        .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .popup-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        width: 300px;
+        text-align: center;
+    }
+
+    .popup-buttons {
+        margin-top: 20px;
+    }
+
+    .popup-buttons button {
+        background: #0077b6;
+        border-radius:5px;
+        color: #fff;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .popup-buttons button:hover {
+        background: red;
+        border-radius:5px;
+        color: #fff;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
     </style>
 </head>
 
@@ -278,7 +320,7 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
                         <th>Total Cost</th>
                         <!-- <th>ID User</th> -->
                         <th class="action-column">Action</th>
-                        <th class="action-column">Confirm Reservation</th>
+                        <!-- <th class="action-column">Confirm Reservation</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -299,11 +341,11 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
                             <td>$<?php echo $reservation['total_cost']; ?></td>
                             <td class="action-column">
                                 <a class="action-link" href="action/edit_status.php?id=<?php echo $reservation['id_reservation']; ?>">Edit</a>  
-                                <a class="action-link" href="action/process/delete_reservation.php?id=<?php echo $reservation['id_reservation']; ?>">Delete</a>
+                                <a class="action-link" href="#" onclick="confirmDelete(<?php echo $reservation['id_reservation']; ?>)">Delete</a>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <a class="action-link" href="action/confirm_status.php?id=<?php echo $reservation['id_reservation']; ?>">Confirm</a>
-                            </td>
+                            </td> -->
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -326,6 +368,33 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
         </div>
     </div>
 
+
+    <div class="popup-overlay" id="popup">
+    <div class="popup-container">
+        <p>Are you sure you want to delete this reservation?</p>
+        <div class="popup-buttons">
+            <button onclick="deleteReservation()">Yes</button>
+            <button onclick="cancelDelete()">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let reservationIdToDelete;
+
+    function confirmDelete(reservationId) {
+        reservationIdToDelete = reservationId;
+        document.getElementById('popup').style.display = 'flex';
+    }
+
+    function deleteReservation() {
+        window.location.href = `action/process/delete_reservation.php?id=${reservationIdToDelete}`;
+    }
+
+    function cancelDelete() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
 </body>
 
 </html>

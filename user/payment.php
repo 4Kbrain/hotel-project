@@ -14,34 +14,21 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 if (!isset($_SESSION['user'])) {
     header("Location: ../session/index.php");
     exit();
 }
-
 
 if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
     echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);
     exit();
 }
 
-function getUserId($conn, $gmail)
+function getUserPayments($conn)
 {
-    $user_sql = "SELECT id_user FROM users WHERE gmail = '$gmail'";
-    $user_result = $conn->query($user_sql);
-
-    if ($user_result->num_rows > 0) {
-        $user_row = $user_result->fetch_assoc();
-        return $user_row['id_user'];
-    } else {
-        return null;
-    }
-}
-
-function getUserPayments($conn, $user_id)
-{
-    $sql = "SELECT * FROM payment WHERE id_user = $user_id";
+    $sql = "SELECT p.id_payment, p.id_reservation, p.confirm, r.total_cost
+            FROM payment p
+            JOIN roombook r ON p.id_reservation = r.id_reservation";
     $result = $conn->query($sql);
     $payments = [];
 
@@ -56,36 +43,19 @@ function getUserPayments($conn, $user_id)
 
 function changePaymentStatus($conn, $payment_id, $new_status)
 {
-    $update_sql = "UPDATE payment SET paid = '$new_status' WHERE id_payment = $payment_id";
+    $update_sql = "UPDATE payment SET confirm = '$new_status' WHERE id_payment = $payment_id";
     $conn->query($update_sql);
 }
 
-if (!isset($_SESSION['user'])) {
-    header("Location: ../session/index.php");
-    exit();
-}
+$payments = getUserPayments($conn);
 
-$user_email = $_SESSION['user'];
-$user_id = getUserId($conn, $user_email);
-
-if ($user_id !== null) {
-    $payments = getUserPayments($conn, $user_id);
-} else {
-    echo json_encode(["success" => false, "message" => "User ID not found. Try Again Later"]);
-    exit();
-}
-
-
-// Handle Action dari Change
+// Handle Action from Change
 if (isset($_GET['change_id'])) {
     $change_id = $_GET['change_id'];
     changePaymentStatus($conn, $change_id, 'Paid');
     header("Location: payment.php");
     exit();
 }
-
-
-$payments = getUserPayments($conn, $user_id);
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 $perPage = 10;
@@ -94,9 +64,7 @@ $totalPages = ceil($totalPayments / $perPage);
 $start = ($page - 1) * $perPage;
 $end = $start + $perPage;
 $paymentsToShow = array_slice($payments, $start, $perPage);
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,18 +74,18 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <style>
-
-        ::-webkit-scrollbar {
-            display:none;
+           ::-webkit-scrollbar {
+            display: none;
         }
-
-body {
+        
+        body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
         }
-              .top-navbar {
+
+        .top-navbar {
             background-color: #4894FE;
             padding: 10px 20px;
             display: flex;
@@ -186,6 +154,7 @@ body {
             overflow-y: auto;
             overflow-x: hidden;
         }
+
         .sidebar {
             width: 180px;
             background-color: #f0f0f0;
@@ -203,7 +172,8 @@ body {
             text-decoration: none;
             color: #555;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 
+            18px;
             padding: 10px 20px;
             transition: all 0.3s ease;
         }
@@ -219,7 +189,6 @@ body {
         }
 
         .payment-container {
-
             margin-left: 200px;
             padding: 20px;
             text-align: center;
@@ -232,7 +201,8 @@ body {
             margin-top: 20px;
         }
 
-        .payment-table th, .payment-table td {
+        .payment-table th,
+        .payment-table td {
             border: 1px solid #ddd;
             padding: 10px;
         }
@@ -255,76 +225,178 @@ body {
             border-radius: 5px;
             margin: 5px auto;
         }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination-link {
+            text-decoration: none;
+            color: #333;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            margin-right: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination-link.active {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        .pagination-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+    }
+
+    #confirm-btn {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    #cancel-btn {
+        background-color: #f44336;
+        color: white;
+    }
     </style>
 </head>
 
 <body>
 
-<div class="top-navbar">
+    <div class="top-navbar">
         <div class="logo">
             <a href="#"><span style="color:#fff">Admin</span></a>
         </div>
         <div class="profile">
             <span style="color:#fff;">Username</span>
             <div class="profile-menu">
-                <a href="#">Profile</a><hr>
+                <a href="#">Profile</a>
+                <hr>
                 <a href="../logout.php">Logout</a>
             </div>
         </div>
     </div>
 
-<div class="sidebar">
-    <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a><hr>
-    <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a><hr>
-    <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a>
+    <div class="sidebar">
+        <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a>
+        <hr>
+        <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a>
+        <hr>
+        <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a>
+        <hr>
+        <a href="room.php" <?php echo basename($_SERVER['PHP_SELF']) == 'room.php' ? 'class="active"' : ''; ?>>Room</a>
+    
     </div>
 
-<div class="payment-container">
-    <div class="blank">
-        <span>-</span>
+    <br>
+    <div class="payment-container">
+        <h2>Data Payment</h2>
+        <table class="payment-table">
+            <thead>
+                <tr>
+                    <th>ID Payment</th>
+                    <th>ID Reservation</th>
+                    <th>Confirm</th>
+                    <th>Total Cost</th>
+                    <th class="action-column">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($payments as $payment) : ?>
+                    <tr>
+                        <td><?php echo $payment['id_payment']; ?></td>
+                        <td><?php echo $payment['id_reservation']; ?></td>
+                        <td><?php echo $payment['confirm']; ?></td>
+                        <td><?php echo isset($payment['total_cost']) ? $payment['total_cost'] : 'UwU'; ?></td>
+                        <td class="action-column">
+    <?php if (isset($payment['confirm']) && $payment['confirm'] === 'Not Confirmed') : ?>
+        <a class="action-link" href="#" onclick="showConfirmationModal(<?php echo $payment['id_payment']; ?>)">Change</a>
+    <?php endif; ?>
+    <a class="action-link" href="action/print_payment.php?id=<?php echo $payment['id_payment']; ?>">Print</a>
+</td>
+
+<div id="confirmation-modal" class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to change the payment status to 'Paid'?</p>
+        <button id="confirm-btn">Confirm</button>
+        <button id="cancel-btn">Cancel</button>
     </div>
-    <h2>Data Payment</h2>
-    <table class="payment-table">
-        <thead>
-        <tr>
-            <th>ID Payment</th>
-            <th>ID Reservation</th>
-            <th>Paid</th>
-            <th class="action-column">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($payments as $payment): ?>
-            <tr>
-                <td><?php echo $payment['id_payment']; ?></td>
-                <td><?php echo $payment['id_reservation']; ?></td>
-                <td><?php echo isset($payment['paid']) ? $payment['paid'] : 'UwU'; ?></td>
-                <td class="action-column">
-                    <?php if (isset($payment['paid']) && $payment['paid'] === 'Unpaid'): ?>
-                        <a class="action-link" href="payment.php?change_id=<?php echo $payment['id_payment']; ?>">Change</a>
-                    <?php endif; ?>
-                    <a class="action-link" href="action/print_payment.php?id=<?php echo $payment['id_payment']; ?>">Print</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <div class="pagination">
-                    <?php
-
-
-                $totalEntries = mysqli_num_rows($conn->query("SELECT id_payment FROM payment"));
-                $totalPages = ceil($totalPayments / $PerPage);
-
-                    for ($i = 1; $i <= $totalPages; $i++) {
-                        echo "<a href='?page=$i' class='pagination-link";
-                        echo ($i == $page) ? " active'" : "'";
-                        echo ">$i</a> ";
-                    }
-                    ?>
-                </div>
 </div>
+
+<script>
+    function showConfirmationModal(paymentId) {
+        const modal = document.getElementById('confirmation-modal');
+        modal.style.display = 'block';
+
+        const confirmBtn = document.getElementById('confirm-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        confirmBtn.onclick = function() {
+            window.location.href = `payment.php?change_id=${paymentId}`;
+        };
+
+        cancelBtn.onclick = function() {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+    }
+</script>
+
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <?php
+            $totalEntries = $conn->query("SELECT COUNT(*) AS total FROM payment")->fetch_assoc()['total'];
+            $totalPages = ceil($totalEntries / $perPage);
+
+            for ($i = 1; $i <= $totalPages; $i++) {
+                echo "<a href='?page=$i' class='pagination-link";
+                echo ($i == $page) ? " active'" : "'";
+                echo ">$i</a> ";
+            }
+            ?>
+        </div>
+    </div>
 
 </body>
 

@@ -37,12 +37,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bedCost = $bed === 'None' ? 0 : 20; 
     $totalCost = ($roomCost + $bedCost) * $nroom;
 
-    $sql = "INSERT INTO roombook (FName, LName, Email, Phone, TRoom, Bed, NRoom, cin, cout, stat, nodays, total_cost, id_user)
-            VALUES ('$fname', '$lname', '$email', '$phone', '$troom', '$bed', '$nroom', '$cin', '$cout', 'Pending', $nodays, $totalCost, 1)";
+    $sql = "INSERT INTO roombook (FName, LName, Email, Phone, TRoom, Bed, NRoom, cin, cout, stat, nodays, total_cost)
+            VALUES ('$fname', '$lname', '$email', '$phone', '$troom', '$bed', '$nroom', '$cin', '$cout', 'Pending', $nodays, $totalCost)";
 
     if ($conn->query($sql) === TRUE) {
-        echo '<script>alert("Your booking application has been sent!");</script>';
-        echo '<script>window.location.replace("../index.php");</script>';
+        // Insert into payment table
+        $id_reservation = $conn->insert_id;
+        $payment_sql = "INSERT INTO payment (id_reservation, confirm, total_cost)
+                        VALUES ($id_reservation, 'Not Confirmed', $totalCost)";
+        if ($conn->query($payment_sql) === TRUE) {
+            echo '<script>alert("Your booking application has been sent!");</script>';
+            echo '<script>window.location.replace("../index.php");</script>';
+        } else {
+            echo '<script>alert("Error adding user to the database. Check your details and try again.");</script>';
+            echo '<script>window.location.replace("reservation_form.php");</script>';
+        }
     } else {
         echo '<script>alert("Error adding user to the database. Check your details and try again.");</script>';
         echo '<script>window.location.replace("reservation_form.php");</script>';

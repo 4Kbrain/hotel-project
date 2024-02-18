@@ -186,7 +186,7 @@ if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
             <a href="#"><span style="color:#fff;">Admin</span></a>
         </div>
         <div class="profile">
-            <span>Username</span>
+            <span style="color: #fff;">Username</span>
             <div class="profile-menu">
                 <a href="#">Profile</a><hr>
                 <a href="../logout.php">Logout</a>
