@@ -13,7 +13,6 @@
   </head>
   <body>
 
-    <!-- navbar -->
     <header class="header">
     <a href="#" class="logo"> Grand<span>Emporium</span> </a>
     <nav class="navbar">
@@ -26,10 +25,10 @@
         <?php
         session_start();
         if (isset($_SESSION['user'])) {
-            // User is logged in, show Reservation link
+         // reservation link
             echo '<a href="http://localhost/hotel-project/reservation/reservation_form.php" class="btn" target="_self">Reservation</a>';
         } else {
-            // User is not logged in, show Login link
+         // login link
             echo '<a href="http://localhost/hotel-project/session/index.php" class="btn">Login</a>';
         }
         ?>

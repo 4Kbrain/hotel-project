@@ -24,7 +24,7 @@ if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
     exit();
 }
 
-// Function to get rooms from the database
+// get rooms dbs
 function getRooms($conn)
 {
     $sql = "SELECT * FROM rooms";
