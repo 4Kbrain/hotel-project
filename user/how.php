@@ -1,85 +1,15 @@
-<?php
-session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "grand";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if (!isset($_SESSION['user'])) {
-    header("Location: ../session/index.php");
-    exit();
-}
-
-if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
-    echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);
-    exit();
-}
-
-function getUserPayments($conn)
-{
-    $sql = "SELECT p.id_payment, ,p.id_reservation, p.confirm, r.total_cost
-            FROM payment p
-            JOIN roombook r ON p.id_reservation = r.id_reservation";
-    $result = $conn->query($sql);
-    $payments = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $payments[] = $row;
-        }
-    }
-
-    return $payments;
-}
-
-function changePaymentStatus($conn, $payment_id, $new_status)
-{
-    $update_sql = "UPDATE payment SET confirm = '$new_status' WHERE id_payment = $payment_id";
-    $conn->query($update_sql);
-}
-
-$payments = getUserPayments($conn);
-
-// Handle Action from Change
-if (isset($_GET['change_id'])) {
-    $change_id = $_GET['change_id'];
-    changePaymentStatus($conn, $change_id, 'Paid');
-    header("Location: payment.php");
-    exit();
-}
-
-// Payment paginations
-
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$perPage = 10;
-$totalPayments = count($payments);
-$totalPages = ceil($totalPayments / $perPage);
-$start = ($page - 1) * $perPage;
-$end = $start + $perPage;
-$entriesPerPage = 10;
-$paymentsToShow = array_slice($payments, $start, $perPage);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <title>Document</title>
     <style>
-           ::-webkit-scrollbar {
+
+        ::webkit-scrollbar {
             display: none;
         }
+        
         
         body {
             margin: 0;
@@ -191,26 +121,26 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
             color: #0077b6;
         }
 
-        .payment-container {
+        .pembayaran-container {
             margin-left: 200px;
             padding: 20px;
             text-align: center;
         }
 
-        .payment-table {
+        .pembayaran-table {
             width: 99%;
             margin-left: 10px;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        .payment-table th,
-        .payment-table td {
+        .pembayaran-table th,
+        .pembayaran-table td {
             border: 1px solid #ddd;
             padding: 10px;
         }
 
-        .payment-table th {
+        .pembayaran-table th {
             background-color: #f0f0f0;
         }
 
@@ -295,10 +225,9 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
     }
     </style>
 </head>
-
 <body>
 
-    <div class="top-navbar">
+<div class="top-navbar">
         <div class="logo">
             <a href="#"><span style="color:#fff">Admin</span></a>
         </div>
@@ -310,9 +239,10 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
                 <a href="../logout.php">Logout</a>
             </div>
         </div>
-    </div>
+    </div>    
 
-    <div class="sidebar">
+
+<div class="sidebar">
         <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a>
         <hr>
         <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a>
@@ -321,103 +251,35 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
         <!-- <hr> -->
         <!-- <a href="room.php" <?php echo basename($_SERVER['PHP_SELF']) == 'room.php' ? 'class="active"' : ''; ?>>Room</a> -->
         <hr>
-        <a href="how.php" <?php echo basename($_SERVER['PHP_SELF']) == 'how.php' ? 'class="active"' : '';?>>Pembayaran</a>
-    
+        <a href="how.php" <?php echo basename($_SERVER['PHP_SELF']) == 'how.php' ? 'class="active"' : ''; ?>>Pembayaran</a>
     </div>
+    <div class="container">
 
-    <br>
-    <div class="payment-container">
-        <h2>Data Payment</h2>
-        <table class="payment-table">
+    <table class="pembayaran-container">
+        <th></th>
+        <table class="pembayaran-container">
             <thead>
                 <tr>
-                    <th>ID Payment</th>
+                    <th>ID Pembayaran</th>
+                    <th>Invoice</th>
                     <th>First</th>
                     <th>Last</th>
                     <th>Gmail</th>
-                    <th>ID Reservation</th>
                     <th>Type Room</th>
-                    <th>Bed</th>
                     <th>Number Room</th>
-                    <th>Total Cost</th>
+                    <th>Bed</th>
                     <th>Amount Paid</th>
-                    <th>Description</th>
-                    <th class="action-column">Action</th>
+                    <th>Date paid</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($payments as $payment) : ?>
-                    <tr>
-                        <td><?php echo $payment['id_payment']; ?></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><?php echo $payment['id_reservation']; ?></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                       
-                        <td><?php echo isset($payment['total_cost']) ? $payment['total_cost'] : 'Error :)'; ?></td>
-                        <td></td>
-                        <td><?php echo $payment['confirm']; ?></td>
-                        <td class="action-column">
-    <?php if (isset($payment['confirm']) && $payment['confirm'] === 'Not Confirmed') : ?>
-        <a class="action-link" href="#" onclick="showConfirmationModal(<?php echo $payment['id_payment']; ?>)">Change</a>
-    <?php endif; ?>
-    <a class="action-link" href="action/print_payment.php?id=<?php echo $payment['id_payment']; ?>">Print</a>
-</td>
-
-<div id="confirmation-modal" class="modal">
-    <div class="modal-content">
-        <p>Are you sure you want to change the payment status to 'Paid'?</p>
-        <button id="confirm-btn">Confirm</button>
-        <button id="cancel-btn">Cancel</button>
-    </div>
-</div>
-
-<script>
-    function showConfirmationModal(paymentId) {
-        const modal = document.getElementById('confirmation-modal');
-        modal.style.display = 'block';
-
-        const confirmBtn = document.getElementById('confirm-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
-
-        confirmBtn.onclick = function() {
-            window.location.href = `payment.php?change_id=${paymentId}`;
-        };
-
-        cancelBtn.onclick = function() {
-            modal.style.display = 'none';
-        };
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        };
-    }
-</script>
-
-                    </tr>
-                <?php endforeach; ?>
+                <tr>
+                    <td><?pp echo $pembayaran['id_']</td>
+                </tr>
             </tbody>
         </table>
-
-        <div class="pagination">
-                <?php
-                $totalEntries = mysqli_num_rows($conn->query("SELECT id_payment FROM payment"));
-                $totalPages = ceil($totalEntries / $entriesPerPage);
-
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    echo "<a href='?page=$i' class='pagination-link";
-                    echo ($i == $page) ? " active'" : "'";
-                    echo ">$i</a> ";
-                }
-                ?>
-            </div>
+    </table>
     </div>
-
 </body>
-
 </html>

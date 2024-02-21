@@ -19,6 +19,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
+// !== maksudnya kalau bukan , == artinya kalay iya
 
 if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
     echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);

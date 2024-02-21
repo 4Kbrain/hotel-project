@@ -8,6 +8,7 @@ if (isset($_SESSION['user'])) {
     exit();
 }
 
+
 $error_message = ''; // Define the error message variable
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

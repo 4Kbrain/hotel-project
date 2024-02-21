@@ -27,7 +27,7 @@ if ($user_result->num_rows > 0) {
     $user_row = $user_result->fetch_assoc();
     $user_id = $user_row['id_user'];
 
-    $sql = "SELECT * FROM roombook WHERE id_user = $user_id";
+    $sql = "SELECT * FROM roombook WHERE id_reservation = $user_id";    
     $result = $conn->query($sql);
     $reservations = [];
 
@@ -59,7 +59,7 @@ if ($user_result->num_rows > 0) {
 <html lang="en">
 
 <div class="bottom-navbar">
-    <a href="reservation.php" class="navbar-item">Adorable Reservation</a>
+    <a href="reservation_form.php" class="navbar-item">  Reservation</a>
     <span class="navbar-divider">|</span>
     <a href="my_reservation.php" class="navbar-item active">My Reservation</a>
 </div>

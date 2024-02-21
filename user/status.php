@@ -364,7 +364,7 @@ $reservations = getUserReservations($conn, $start, $entriesPerPage);
                 ?>
             </div>
 
-            <!-- <a class="action-link" href="action/create_status.php" id="entry">New Entry</a> -->
+            <a class="action-link" href="../reservation/reservation_form.php" id="entry">New Entry</a>
         </div>
     </div>
 
