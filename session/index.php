@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mygmail = mysqli_real_escape_string($con, $_POST['username']);
     $enteredPassword = mysqli_real_escape_string($con, $_POST['password']);
 
-    $sql = "SELECT id_user, password, is_admin FROM users WHERE gmail = '$mygmail'";
+    $sql = "SELECT NIK, password, is_admin FROM users WHERE gmail = '$mygmail'";
     $result = mysqli_query($con, $sql);
 
     if ($result) {

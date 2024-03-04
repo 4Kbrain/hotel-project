@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../session/index.php");
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -11,21 +18,23 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $troom = $_POST['troom'];
-    $bed = $_POST['bed'];
-    $nroom = $_POST['nroom'];
-    $cin = $_POST['cin'];
-    $cout = $_POST['cout'];
+    $NIK = $_SESSION['user'];
+    $fname = mysqli_real_escape_string($conn, $_POST['fname']);
+    $lname = mysqli_real_escape_string($conn, $_POST['lname']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $troom = mysqli_real_escape_string($conn, $_POST['troom']);
+    $bed = mysqli_real_escape_string($conn, $_POST['bed']);
+    $nroom = mysqli_real_escape_string($conn, $_POST['nroom']);
+    $cin = mysqli_real_escape_string($conn, $_POST['cin']);
+    $cout = mysqli_real_escape_string($conn, $_POST['cout']);
 
-    // number dayss 
+    // Hitung jumlah hari menginap
     $checkin = new DateTime($cin);
     $checkout = new DateTime($cout);
     $nodays = $checkin->diff($checkout)->days;
 
+    // Hitung total biaya
     $roomTypeCosts = [
         'Superior Room' => 100,
         'Deluxe Room' => 150,
@@ -35,17 +44,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $roomCost = $roomTypeCosts[$troom] ?? 0;
     $bedCost = $bed === 'None' ? 0 : 20; 
-    $totalCost = ($roomCost + $bedCost) * $nroom;
+    $totalCost = ($roomCost + $bedCost) * $nroom * $nodays;
 
-    $sql = "INSERT INTO roombook (FName, LName, Email, Phone, TRoom, Bed, NRoom, cin, cout, stat, nodays, total_cost)
-            VALUES ('$fname', '$lname', '$email', '$phone', '$troom', '$bed', '$nroom', '$cin', '$cout', 'Pending', $nodays, $totalCost)";
+    // Check kalau email sudah ada di tabel reservation
+    $check_email_sql = "SELECT * FROM reservation WHERE email = ?";
+    $check_email_stmt = $conn->prepare($check_email_sql);
+    $check_email_stmt->bind_param("s", $email);
+    $check_email_stmt->execute();
+    $check_email_result = $check_email_stmt->get_result();
+    if ($check_email_result->num_rows > 0) {
+        echo '<script>alert("Email already exists. Please use a different email.");</script>';
+        echo '<script>window.location.replace("reservation_form.php");</script>';
+        exit(); // Stop execution if email already exists
+    }
 
-    if ($conn->query($sql) === TRUE) {
-        // Insert into payment table
-        $id_reservation = $conn->insert_id;
-        $payment_sql = "INSERT INTO payment (id_reservation, confirm, total_cost)
-                        VALUES ($id_reservation, 'Not Confirmed', $totalCost)";
-        if ($conn->query($payment_sql) === TRUE) {
+    // Insert data ke dalam tabel reservation
+    $status = 'Waiting For Approval'; // Atau nilai lain sesuai dengan kebutuhan
+    $insert_reservation_sql = "INSERT INTO reservation (NIK, fname, lname, email, phone, troom, bed, nroom, cin, cout, status, nodays, total_cost)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $insert_reservation_stmt = $conn->prepare($insert_reservation_sql);
+    $insert_reservation_stmt->bind_param("ssssssssssssd", $NIK, $fname, $lname, $email, $phone, $troom, $bed, $nroom, $cin, $cout, $status, $nodays, $totalCost);
+    if ($insert_reservation_stmt->execute()) {
+        // Insert ke tabel payment
+        $id_reservation = $insert_reservation_stmt->insert_id;
+        $insert_payment_sql = "INSERT INTO payment (id_reservation, confirm, total_cost) VALUES (?, 'Not Confirmed', ?)";
+        $insert_payment_stmt = $conn->prepare($insert_payment_sql);
+        $insert_payment_stmt->bind_param("id", $id_reservation, $totalCost);
+        if ($insert_payment_stmt->execute()) {
             echo '<script>alert("Your booking application has been sent!");</script>';
             echo '<script>window.location.replace("../index.php");</script>';
         } else {
@@ -53,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo '<script>window.location.replace("reservation_form.php");</script>';
         }
     } else {
-        echo '<script>alert("Error adding user to the database. Check your details and try again.");</script>';
+        echo '<script>alert("Error adding user to the database: ' . $conn->error . '");</script>';
         echo '<script>window.location.replace("reservation_form.php");</script>';
     }
 }

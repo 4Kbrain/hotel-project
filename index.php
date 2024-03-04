@@ -25,10 +25,10 @@
         <?php
         session_start();
         if (isset($_SESSION['user'])) {
-         // reservation link
+         // reservation link -- kalau sudah login
             echo '<a href="http://localhost/hotel-project/reservation/reservation_form.php" class="btn" target="_self">Reservation</a>';
         } else {
-         // login link
+         // login link -- kalau belum login
             echo '<a href="http://localhost/hotel-project/session/index.php" class="btn">Login</a>';
         }
         ?>

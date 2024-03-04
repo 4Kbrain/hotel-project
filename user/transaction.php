@@ -1,16 +1,4 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['user'])) {
-    header("Location: ../session/index.php");
-    exit();
-}
-
-if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
-    echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);
-    exit();
-}
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -24,10 +12,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
-$sql = "SELECT * FROM reservation";
-$result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +20,6 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
     <style>
         
@@ -49,52 +32,6 @@ $result = $conn->query($sql);
             overflow-x: hidden;
         }
 
-        .popup {
-            display: none;
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-        }
-
-        .popup-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        .popup-buttons {
-            margin-top: 20px;
-        }
-
-        .popup-buttons button {
-            padding: 8px 16px;
-            margin: 0 10px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .popup-buttons button.yes {
-            background-color: #4CAF50;
-            color: #fff;
-        }
-
-        .popup-buttons button.no {
-            background-color: #f44336;
-            color: #fff;
-        }
-
-        
 
         .navbar {
             background-color: #4894FE;
@@ -193,8 +130,7 @@ $result = $conn->query($sql);
 
         .content {
             padding: 20px;
-            margin-top: 50px;
-            margin-left: -20px;
+            margin-left: 200px;
             flex-grow: 1;
             overflow-y: auto;
             overflow-x: hidden;
@@ -211,6 +147,73 @@ $result = $conn->query($sql);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+
+            overflow-x: hidden;
+        }
+
+
+
+.container {
+    max-width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.action-column {
+    width: 100px;
+}
+
+.action-link {
+    display: block;
+    text-align: center;
+    padding: 5px;
+    text-decoration: none;
+    background-color: #0077b6;
+    color: white;
+    border-radius: 5px;
+    margin: 5px auto;
+}
+
+.action-link:hover {
+    background-color: #005b8c;
+}
+
         @media screen and (max-width: 768px) {
             .sidebar {
                 left: -200px;
@@ -221,12 +224,11 @@ $result = $conn->query($sql);
             }
         }
     </style>
-
 </head>
 
 <body>
 
-<div class="navbar">
+    <div class="navbar">
         <div class="logo">
             <a href="#"><span style="color:#fff;">Admin</span></a>
         </div>
@@ -243,103 +245,70 @@ $result = $conn->query($sql);
         <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a>
         <hr>
         <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a>
-        <hr>
-        
-        <a href="transaction.php" <?php echo basename($_SERVER['PHP_SELF']) == 'transaction.php' ? 'class="active"' : ''; ?>>Transactions</a>
+        <!-- <hr> -->
         <!-- <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a> -->
-
+        <hr>
+        <a href="transaction.php" <?php echo basename($_SERVER['PHP_SELF']) == 'transaction.php' ? 'class="active"' : ''; ?>>Transactions</a>
     </div>
+
+
 
 
     <div class="container">
-        <div class="popup" id="confirmUpdatePopup">
-        <div class="popup-content">
-            <p>Apakah Anda yakin ingin memperbarui status reservasi ini?</p>
-            <div class="popup-buttons">
-                <button class="yes" onclick="updateStatus()">Ya</button>
-                <button class="no" onclick="closeUpdatePopup()">Tidak</button>
-            </div>
-        </div>
-    </div>
+    <h1>Transaction List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NIK</th>
+                <th>Nama</th>
+                <th>CIN</th>
+                <th>COUT</th>
+                <th>Total Cost</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "grand";
 
-    <div class="content">
-        <h1>Status Room Booking</h1>
-        <table class="pembayaran-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>NIK</th>
-                    <th>Nama</th>
-                    <th>Tanggal Check-In</th>
-                    <th>Tanggal Check-Out</th>
-                    <th>Room Type</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                while ($row = $result->fetch_assoc()) {
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM transactions";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>" . $row["id"] . "</td>";
                     echo "<td>" . $row["NIK"] . "</td>";
-                    echo "<td>" . $row["fname"] . " " . $row["lname"] . "</td>";
+                    echo "<td>" . $row["nama"] . "</td>";
                     echo "<td>" . $row["cin"] . "</td>";
                     echo "<td>" . $row["cout"] . "</td>";
-                    echo "<td>" . $row["troom"] . " - " . $row["bed"] . "</td>";
-                    echo "<td>";
-                    echo "<select id='status_" . $row['id'] . "'>";
-                    echo "<option value='Waiting For Approval'" . ($row["status"] == "Pending" ? " selected" : "") . ">Pending</option>";
-                    echo "<option value='Approved'" . ($row["status"] == "Approved" ? " selected" : "") . ">Approved</option>";
-                    echo "<option value='Cancelled'" . ($row["status"] == "Cancelled" ? " selected" : "") . ">Cancelled</option>";
-                    echo "</select>";
-                    echo "</td>";
-                    echo "<td><button onclick='confirmUpdate(" . $row["id"] . ")'>Update Status</button></td>";
+                    echo "<td>" . $row["total_cost"] . "</td>";
+                    echo "<td><a class='action-link' href='action/print_invoice.php?id=" . $row["id"] . "' target='_blank'>Print Invoice</a></td>";
                     echo "</tr>";
                 }
-                ?>
-            </tbody>
-        </table>
-    </div>
-    </div>
+            } else {
+                echo "<tr><td colspan='7'>No transactions found</td></tr>";
+            }
 
-    <script>
-        function confirmUpdate(id) {
-            document.getElementById('confirmUpdatePopup').style.display = 'block';
-            document.getElementById('confirmUpdatePopup').dataset.id = id;
-        }
+            // Update room status setlah cout
+            $updateSql = "UPDATE kamar SET room_status = 'Available' WHERE cout <= CURDATE()";
+            $conn->query($updateSql);
 
-        function closeUpdatePopup() {
-            document.getElementById('confirmUpdatePopup').style.display = 'none';
-        }
+            $conn->close();
+            ?>
+        </tbody>
+    </table>
 
-        function updateStatus() {
-            var id = document.getElementById('confirmUpdatePopup').dataset.id;
-            var status = document.getElementById("status_" + id).value;
-
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        alert('Status reservasi berhasil diperbarui');
-                        location.reload();
-                    } else {
-                        alert('Gagal memperbarui status reservasi');
-                    }
-                }
-            };
-            xhr.open('POST', 'update_status.php', true);
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.send('id=' + id + '&status=' + status);
-
-            closeUpdatePopup();
-        }
-    </script>
 
 </body>
-
 </html>
-
-<?php
-$conn->close();
-?>

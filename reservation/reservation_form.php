@@ -5,6 +5,9 @@ if (!isset($_SESSION['user'])) {
     header("Location: ../session/index.php");
     exit();
 }
+
+// Ambil NIK dari sesi :)))
+$nik = $_SESSION['user'];
 ?>
 
 <!DOCTYPE html>
@@ -128,17 +131,19 @@ if (!isset($_SESSION['user'])) {
     <div class="container">
         <h2>Reservation Form</h2>
         <form action="process_reservation.php" method="post">
+        <input type="text" name="NIK" placeholder="NIK TwT" value="<?php echo $nik; ?>" hidden readonly required>
             <input type="text" name="fname" placeholder="First Name" required>
             <input type="text" name="lname" placeholder="Last Name" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="text" name="phone" placeholder="Phone Number" required>
-            <select name="troom" required>
+            <select name="troom" required onchange="showRoomInfo(this)">
                 <option value="" disabled selected>Select Room Type</option>
                 <option value="Superior Room">Superior Room</option>
                 <option value="Deluxe Room">Deluxe Room</option>
                 <option value="Guest House">Guest House</option>
                 <option value="Single Room">Single Room</option>
             </select>
+            <div id="roomInfo"></div>
             <select name="bed" required>
                 <option value="" disabled selected>Select Bedding Type</option>
                 <option value="Single">Single</option>
@@ -163,60 +168,95 @@ if (!isset($_SESSION['user'])) {
 
             <button type="submit" name="submit">Submit</button>
         </form>
+        <div class="clear"> </div>
+        <div class="clear"></div>
+        <div class="clear"></div>
+        <div class="clear"></div>
+        <div class="clear"></div>
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const roomTypeSelect = document.querySelector('select[name="troom"]');
-                const bedTypeSelect = document.querySelector('select[name="bed"]');
-                const numRoomsSelect = document.querySelector('select[name="nroom"]');
-                const cinInput = document.querySelector('input[name="cin"]');
-                const coutInput = document.querySelector('input[name="cout"]');
-                const totalCostElement = document.getElementById('totalCost');
-                const costBreakdownElement = document.getElementById('costBreakdown');
-                const numDaysElement = document.getElementById('numDays');
+           const roomTypeSelect = document.querySelector('select[name="troom"]');
+const bedTypeSelect = document.querySelector('select[name="bed"]');
+const numRoomsSelect = document.querySelector('select[name="nroom"]');
+const cinInput = document.querySelector('input[name="cin"]');
+const coutInput = document.querySelector('input[name="cout"]');
+const totalCostElement = document.getElementById('totalCost');
+const costBreakdownElement = document.getElementById('costBreakdown');
+const numDaysElement = document.getElementById('numDays');
 
-                const roomTypeCosts = {
-                    'Superior Room': 100,
-                    'Deluxe Room': 150,
-                    'Guest House': 200,
-                    'Single Room': 80,
-                };
+const roomTypeCosts = {
+    'Superior Room': 100,
+    'Deluxe Room': 150,
+    'Guest House': 200,
+    'Single Room': 80,
+};
 
-                const calculateTotalCostAndDays = () => {
-                    const roomType = roomTypeSelect.value;
-                    const bedType = bedTypeSelect.value;
-                    const numRooms = numRoomsSelect.value;
-                    const cinDate = new Date(cinInput.value);
-                    const coutDate = new Date(coutInput.value);
+const calculateTotalCostAndDays = () => {
+    const roomType = roomTypeSelect.value;
+    const bedType = bedTypeSelect.value;
+    const numRooms = numRoomsSelect.value;
+    const cinDate = new Date(cinInput.value);
+    const coutDate = new Date(coutInput.value);
 
-                    const roomCost = roomTypeCosts[roomType] || 0;
-                    const bedCost = bedType === 'None' ? 0 : 20;
+    const roomCost = roomTypeCosts[roomType] || 0;
+    const bedCost = bedType === 'None' ? 0 : 20;
 
-                    let numDays = Math.ceil((coutDate - cinDate) / (1000 * 60 * 60 * 24));
-                    numDays = numDays < 0 ? 0 : numDays;
+    let numDays = Math.ceil((coutDate - cinDate) / (1000 * 60 * 60 * 24));
+    numDays = numDays < 0 ? 0 : numDays;
 
-                    const totalCost = (roomCost + bedCost) * numRooms * numDays;
-                    const roomCostBreakdown = `Room Cost: $${roomCost * numRooms * numDays}`;
-                    const bedCostBreakdown = `Bed Cost: $${bedCost * numRooms * numDays}`;
+    const totalCost = (roomCost + bedCost) * numRooms * numDays;
+    const roomCostBreakdown = `Room Cost: $${roomCost * numRooms * numDays}`;
+    const bedCostBreakdown = `Bed Cost: $${bedCost * numRooms * numDays}`;
 
-                    totalCostElement.textContent = `Total Cost: $${totalCost}`;
-                    costBreakdownElement.textContent = `${roomCostBreakdown} | ${bedCostBreakdown}`;
-                    numDaysElement.textContent = `Number of Days: ${numDays}`;
-                };
+    totalCostElement.textContent = `Total Cost: $${totalCost}`;
+    costBreakdownElement.textContent = `${roomCostBreakdown} | ${bedCostBreakdown}`;
+    numDaysElement.textContent = `Number of Days: ${numDays}`;
+};
 
-                calculateTotalCostAndDays();
+const showRoomInfo = (select) => {
+    const selectedRoomType = select.value;
 
-                roomTypeSelect.addEventListener('change', calculateTotalCostAndDays);
-                bedTypeSelect.addEventListener('change', calculateTotalCostAndDays);
-                numRoomsSelect.addEventListener('change', calculateTotalCostAndDays);
-                cinInput.addEventListener('change', calculateTotalCostAndDays);
-                coutInput.addEventListener('change', calculateTotalCostAndDays);
+    // AJAX request mengambil data kamar berdasarkan jenis kamar yang dipilih
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'fetch_room_data.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+
+            // Update pilihan select bed
+            bedTypeSelect.innerHTML = '<option value="" disabled selected>Select Bedding Type</option>';
+            response.forEach(room => {
+                bedTypeSelect.innerHTML += `<option value="${room.bed_type}">${room.bed_type}</option>`;
             });
+
+            // Update pilihan select nroom (jumlah kamar)
+            numRoomsSelect.innerHTML = '<option value="" disabled selected>Select Number of Rooms</option>';
+            response.forEach(room => {
+                numRoomsSelect.innerHTML += `<option value="${room.room_capacity}">${room.room_capacity}</option>`;
+            });
+        }
+    };
+    xhr.send(`troom=${selectedRoomType}`);
+};
+
+roomTypeSelect.addEventListener('change', function() {
+    showRoomInfo(this);
+    calculateTotalCostAndDays();
+});
+
+bedTypeSelect.addEventListener('change', calculateTotalCostAndDays);
+numRoomsSelect.addEventListener('change', calculateTotalCostAndDays);
+cinInput.addEventListener('change', calculateTotalCostAndDays);
+coutInput.addEventListener('change', calculateTotalCostAndDays);
+
+calculateTotalCostAndDays();  // total biaya dan hari 
+
         </script>
     </div>
 
 
     <div class="bottom-navbar">
-        <a href="#" class="navbar-item-active">Reservation</a>
+        <a href="reservation_form.php" class="navbar-item-active">Reservation</a>
         <span class="navbar-divider">|</span>
         <a href="myreservation.php" class="navbar-item">My Reservation</a>
     </div>

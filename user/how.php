@@ -223,6 +223,8 @@
         background-color: #f44336;
         color: white;
     }
+
+    
     </style>
 </head>
 <body>
@@ -255,31 +257,6 @@
     </div>
     <div class="container">
 
-    <table class="pembayaran-container">
-        <th></th>
-        <table class="pembayaran-container">
-            <thead>
-                <tr>
-                    <th>ID Pembayaran</th>
-                    <th>Invoice</th>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Gmail</th>
-                    <th>Type Room</th>
-                    <th>Number Room</th>
-                    <th>Bed</th>
-                    <th>Amount Paid</th>
-                    <th>Date paid</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><?pp echo $pembayaran['id_']</td>
-                </tr>
-            </tbody>
-        </table>
-    </table>
     </div>
 </body>
 </html>

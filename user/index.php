@@ -19,7 +19,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-// !== maksudnya kalau bukan , == artinya kalay iya
+// !== maksudnya kalau bukan , == artinya kalau iya
 
 if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
     echo json_encode(["success" => false, "message" => "Admin access only. Go Out"]);
@@ -199,8 +199,10 @@ if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
         <a href="index.php" <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'class="active"' : ''; ?>>Beranda</a>
         <hr>
         <a href="status.php" <?php echo basename($_SERVER['PHP_SELF']) == 'status.php' ? 'class="active"' : ''; ?>>Roombooking</a>
+        <!-- <hr> -->
+        <!-- <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a> -->
         <hr>
-        <a href="payment.php" <?php echo basename($_SERVER['PHP_SELF']) == 'payment.php' ? 'class="active"' : ''; ?>>Payment</a>
+        <a href="transaction.php" <?php echo basename($_SERVER['PHP_SELF']) == 'transaction.php' ? 'class="active"' : ''; ?>>Transactions</a>
     </div>
 
     <div class="content">

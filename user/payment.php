@@ -13,7 +13,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+    
 if (!isset($_SESSION['user'])) {
     header("Location: ../session/index.php");
     exit();
@@ -26,7 +26,7 @@ if ($_SESSION['user'] !== 'aditgaming105@gmail.com') {
 
 function getUserPayments($conn)
 {
-    $sql = "SELECT p.id_payment, ,p.id_reservation, p.confirm, r.total_cost
+    $sql = "SELECT p.id_payment,p.id_reservation, p.confirm, r.total_cost
             FROM payment p
             JOIN roombook r ON p.id_reservation = r.id_reservation";
     $result = $conn->query($sql);
@@ -321,7 +321,7 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
         <!-- <hr> -->
         <!-- <a href="room.php" <?php echo basename($_SERVER['PHP_SELF']) == 'room.php' ? 'class="active"' : ''; ?>>Room</a> -->
         <hr>
-        <a href="how.php" <?php echo basename($_SERVER['PHP_SELF']) == 'how.php' ? 'class="active"' : '';?>>Pembayaran</a>
+        <a href="transaction.php" <?php echo basename($_SERVER['PHP_SELF']) == 'transaction.php' ? 'class="active"' : '';?>>Transaction</a>
     
     </div>
 
@@ -332,14 +332,7 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
             <thead>
                 <tr>
                     <th>ID Payment</th>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Gmail</th>
                     <th>ID Reservation</th>
-                    <th>Type Room</th>
-                    <th>Bed</th>
-                    <th>Number Room</th>
-                    <th>Total Cost</th>
                     <th>Amount Paid</th>
                     <th>Description</th>
                     <th class="action-column">Action</th>
@@ -349,16 +342,11 @@ $paymentsToShow = array_slice($payments, $start, $perPage);
                 <?php foreach ($payments as $payment) : ?>
                     <tr>
                         <td><?php echo $payment['id_payment']; ?></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+
                         <td><?php echo $payment['id_reservation']; ?></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                       
+
                         <td><?php echo isset($payment['total_cost']) ? $payment['total_cost'] : 'Error :)'; ?></td>
-                        <td></td>
+                    
                         <td><?php echo $payment['confirm']; ?></td>
                         <td class="action-column">
     <?php if (isset($payment['confirm']) && $payment['confirm'] === 'Not Confirmed') : ?>

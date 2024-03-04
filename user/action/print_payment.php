@@ -68,7 +68,7 @@ if ($user_id !== null) {
     exit();
 }
 
-// Handle Print Action
+// Handle Print Actiong
 if (isset($_GET['id'])) {
     $payment_id = $_GET['id'];
     $payment_details = getPaymentDetails($conn, $payment_id);
