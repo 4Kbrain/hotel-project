@@ -1,0 +1,101 @@
+echo "Session variables set:<br>";
+    foreach ($_SESSION as $key => $value) {
+        echo "$key = $value<br>";
+    }
+
+
+// Ambil NIK dari sesi :)))
+$nik = $_SESSION['NIK'];
+echo "Session Variables Set:<br>";
+echo "User = " . $_SESSION['user'] . "<br>";
+echo "NIK = " . $nik;
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .reservation {
+            background-color: #fff;
+            padding: 10px 20px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .reservation p {
+            margin: 5px 0;
+        }
+
+        .cancel-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        .no-reservations {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-item {
+            text-align: center;
+            color: #555;
+            text-decoration: none;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .navbar-item:hover {
+            background-color: #ddd;
+        }
+
+        .navbar-item-active {
+            font-weight: 900;
+            background-color: #0077b6;
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-item-active:after {
+            background-color: #0077b6;
+            color: white;
+        }

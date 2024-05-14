@@ -1,3 +1,5 @@
 ErrorDocument 404 /hotel-project/Error/404.php    
 Options -Indexes
 ErrorDocument 403 /hotel-project/Error/403.php
+
+

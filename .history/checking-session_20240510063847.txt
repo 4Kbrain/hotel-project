@@ -1,0 +1,11 @@
+echo "Session variables set:<br>";
+    foreach ($_SESSION as $key => $value) {
+        echo "$key = $value<br>";
+    }
+
+
+    // Ambil NIK dari sesi :)))
+$nik = $_SESSION['NIK'];
+echo "Session Variables Set:<br>";
+echo "User = " . $_SESSION['user'] . "<br>";
+echo "NIK = " . $nik;
